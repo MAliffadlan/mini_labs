@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
+import ColorPickerTool from '../apps/color/ColorPickerTool.tsx';
+---
+
+<Layout title="Color Picker - Mini Labs">
+  <Navbar currentPath="/color-picker" />
+  
+  <main style="max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem;">
+    <div style="margin-bottom: 2.5rem;">
+      <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em;">
+        Color Picker & Converter
+      </h1>
+      <p style="font-size: 1.0625rem; color: var(--text-secondary); max-width: 600px; line-height: 1.6;">
+        Pick colors visually and convert them instantly to HEX, RGB, and HSL values.
+      </p>
+    </div>
+
+    <ColorPickerTool client:load />
+  </main>
+</Layout>
