@@ -1,0 +1,17 @@
+---
+// base64.astro — Base64 Encoder/Decoder tool page
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
+import Base64Tool from '../apps/base64/Base64Tool.tsx';
+---
+
+<Layout title="Base64 Encoder/Decoder" description="Encode and decode Base64 strings">
+  <Navbar currentPath="/base64" />
+  <main style="max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem;">
+    <div style="margin-bottom: 1rem;">
+      <h1 style="font-size: 1.375rem; font-weight: 600; letter-spacing: -0.02em;">Base64 Encoder/Decoder</h1>
+      <p style="font-size: 0.8125rem; color: var(--text-secondary); margin-top: 0.25rem;">Encode text → Base64 or decode Base64 → text</p>
+    </div>
+    <Base64Tool client:only="react" />
+  </main>
+</Layout>

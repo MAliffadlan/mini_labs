@@ -1,0 +1,17 @@
+---
+// json.astro — JSON Formatter tool page
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
+import JsonFormatter from '../apps/json/JsonFormatter.tsx';
+---
+
+<Layout title="JSON Formatter" description="Format, validate, and beautify JSON data">
+  <Navbar currentPath="/json" />
+  <main style="max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem;">
+    <div style="margin-bottom: 1rem;">
+      <h1 style="font-size: 1.375rem; font-weight: 600; letter-spacing: -0.02em;">JSON Formatter</h1>
+      <p style="font-size: 0.8125rem; color: var(--text-secondary); margin-top: 0.25rem;">Paste JSON to format, validate, and beautify</p>
+    </div>
+    <JsonFormatter client:only="react" />
+  </main>
+</Layout>

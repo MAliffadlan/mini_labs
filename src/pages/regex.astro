@@ -1,0 +1,17 @@
+---
+// regex.astro — Regex Tester tool page
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
+import RegexTester from '../apps/regex/RegexTester.tsx';
+---
+
+<Layout title="Regex Tester" description="Test regular expressions with real-time match highlighting">
+  <Navbar currentPath="/regex" />
+  <main style="max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem;">
+    <div style="margin-bottom: 1rem;">
+      <h1 style="font-size: 1.375rem; font-weight: 600; letter-spacing: -0.02em;">Regex Tester</h1>
+      <p style="font-size: 0.8125rem; color: var(--text-secondary); margin-top: 0.25rem;">Test regex patterns with live match highlighting</p>
+    </div>
+    <RegexTester client:only="react" />
+  </main>
+</Layout>

@@ -1,0 +1,67 @@
+---
+// index.astro — Homepage with grid of all available tools
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
+import ToolCard from '../components/ToolCard.tsx';
+
+// Tool definitions for the homepage grid
+const tools = [
+  {
+    title: 'JSON Formatter',
+    description: 'Format, validate, and beautify JSON data with syntax highlighting and error detection.',
+    icon: '{ }',
+    href: '/json',
+    color: '#f59e0b',
+  },
+  {
+    title: 'Base64 Encoder/Decoder',
+    description: 'Encode text to Base64 or decode Base64 strings back to plain text instantly.',
+    icon: '⇋',
+    href: '/base64',
+    color: '#6366f1',
+  },
+  {
+    title: 'Regex Tester',
+    description: 'Test regular expressions against sample text with real-time match highlighting.',
+    icon: '.*',
+    href: '/regex',
+    color: '#22c55e',
+  },
+];
+---
+
+<Layout title="Home">
+  <Navbar currentPath="/" />
+
+  <main style="max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem;">
+    {/* Hero Section */}
+    <div style="text-align: center; margin-bottom: 3rem; padding-top: 2rem;">
+      <h1 style="font-size: 2.5rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 0.75rem;">
+        Mini <span style="background: linear-gradient(135deg, #6366f1, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Labs</span>
+      </h1>
+      <p style="font-size: 1.125rem; color: var(--text-secondary); max-width: 480px; margin: 0 auto;">
+        A collection of fast, modern developer tools. <br/>No sign-up, no tracking — just tools.
+      </p>
+    </div>
+
+    {/* Tools Grid */}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
+      {tools.map((tool) => (
+        <ToolCard
+          title={tool.title}
+          description={tool.description}
+          icon={tool.icon}
+          href={tool.href}
+          color={tool.color}
+        />
+      ))}
+    </div>
+
+    {/* Footer */}
+    <footer style="text-align: center; margin-top: 4rem; padding: 2rem 0; border-top: 1px solid var(--border);">
+      <p style="font-size: 0.8125rem; color: var(--text-muted);">
+        Built with Astro + React · Open Source
+      </p>
+    </footer>
+  </main>
+</Layout>
