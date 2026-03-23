@@ -2,7 +2,7 @@
 // index.astro — Homepage premium redesign
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.tsx';
-import ToolCard from '../components/ToolCard.tsx';
+import SearchableTools from '../components/SearchableTools.tsx';
 
 const categories = [
   {
@@ -70,33 +70,8 @@ const categories = [
       </div>
     </div>
 
-    {/* Categories Grid */}
-    <div id="categories" style="display: flex; flex-direction: column; gap: 5rem;">
-      {categories.map((category) => (
-        <section>
-          <div style="margin-bottom: 2rem;">
-            <h2 style="font-size: 1.875rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em;">
-              {category.name}
-            </h2>
-            <p style="font-size: 1rem; color: var(--text-secondary);">
-              {category.description}
-            </p>
-          </div>
-          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem;">
-            {category.tools.map((tool) => (
-              <ToolCard
-                title={tool.title}
-                description={tool.description}
-                icon={tool.icon}
-                href={tool.href}
-                color={tool.color}
-                glowColor={tool.glowColor}
-              />
-            ))}
-          </div>
-        </section>
-      ))}
-    </div>
+    {/* Interactive Real-time Search and Categories Grid */}
+    <SearchableTools client:load categories={categories} />
 
     {/* Footer */}
     <footer style="text-align: center; margin-top: 8rem; padding: 3rem 0; border-top: 1px solid var(--border);">
