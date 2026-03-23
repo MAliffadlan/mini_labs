@@ -1,5 +1,5 @@
 /**
- * Navbar.tsx — Premium glassmorphism navbar
+ * Navbar.tsx — Aesthetic Floating Pill Navbar (Ultra Premium)
  */
 import React from 'react';
 
@@ -10,121 +10,140 @@ interface NavbarProps {
 const navLinks = [
   { name: 'Home', path: '/' },
   { name: 'Categories', path: '/#categories' },
+  { name: 'GitHub', path: 'https://github.com/MAliffadlan/mini_labs' }
 ];
 
 export default function Navbar({ currentPath = '/' }: NavbarProps) {
   return (
-    <nav
+    <div
       style={{
         position: 'sticky',
-        top: 0,
-        zIndex: 50,
-        borderBottom: '1px solid var(--border)',
-        backgroundColor: 'rgba(9, 9, 11, 0.65)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+        top: '1.5rem',
+        zIndex: 100,
+        display: 'flex',
+        justifyContent: 'center',
+        padding: '0 1rem',
+        marginBottom: '3rem', /* Spacing below the navbar */
+        marginTop: '1.5rem'
       }}
     >
-      <div
+      <nav
         style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          padding: '0 1.5rem',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
-          height: '64px',
+          gap: '2.5rem',
+          padding: '0.625rem 1rem 0.625rem 1.25rem',
+          borderRadius: '9999px',
+          backgroundColor: 'rgba(24, 24, 27, 0.6)', /* zinc-900 with opacity */
+          backdropFilter: 'blur(24px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          boxShadow: '0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
         }}
       >
-        {/* Animated Brand Logo */}
+        {/* Aesthetic Minimal Logo */}
         <a
           href="/"
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0.75rem',
+            gap: '0.625rem',
             textDecoration: 'none',
-            color: 'var(--text-primary)',
-            transition: 'opacity 0.2s ease',
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.8')}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
         >
+          {/* Abstract Ring Logo */}
           <div
             style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '10px',
+              width: '24px',
+              height: '24px',
+              borderRadius: '50%',
               background: 'linear-gradient(135deg, var(--accent-blue), var(--accent-purple))',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '18px',
-              boxShadow: '0 0 15px rgba(139, 92, 246, 0.3)',
-              position: 'relative',
+              boxShadow: '0 0 16px rgba(139, 92, 246, 0.4)',
             }}
           >
-            <span style={{ position: 'relative', zIndex: 2, color: '#fff', fontWeight: 'bold' }}>⚗</span>
-            {/* Glowing ring under icon */}
             <div
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                borderRadius: 'inherit',
-                background: 'inherit',
-                filter: 'blur(8px)',
-                opacity: 0.6,
-                zIndex: 1,
+                width: '10px',
+                height: '10px',
+                backgroundColor: '#09090b', /* Match body background */
+                borderRadius: '50%',
               }}
             ></div>
           </div>
-          <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: '1.25rem', letterSpacing: '-0.02em' }}>
-            Mini Labs
+          <span
+            style={{
+              fontFamily: "'Outfit', sans-serif",
+              fontWeight: 700,
+              fontSize: '1.125rem',
+              color: '#ffffff',
+              letterSpacing: '-0.02em',
+            }}
+          >
+            Mini
+            <span style={{ color: 'var(--text-secondary)', marginLeft: '2px' }}>Labs</span>
           </span>
         </a>
 
-        {/* Navigation Links */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        {/* Links */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
           {navLinks.map((link) => {
-            const isActive = currentPath === link.path;
+            const isActive = currentPath === link.path && !link.path.startsWith('http');
             return (
               <a
                 key={link.path}
                 href={link.path}
+                target={link.path.startsWith('http') ? '_blank' : undefined}
+                rel={link.path.startsWith('http') ? 'noopener noreferrer' : undefined}
                 style={{
-                  padding: '0.4rem 0.875rem',
-                  borderRadius: '8px',
-                  fontSize: '0.875rem',
-                  fontWeight: 600,
+                  position: 'relative',
+                  padding: '0.4rem 1rem',
+                  borderRadius: '9999px',
+                  fontSize: '0.8125rem',
+                  fontWeight: 500,
+                  fontFamily: "'Inter', sans-serif",
                   textDecoration: 'none',
-                  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                  color: isActive ? '#fff' : 'var(--text-secondary)',
-                  backgroundColor: isActive ? 'var(--bg-elevated)' : 'transparent',
-                  border: isActive ? '1px solid var(--border-hover)' : '1px solid transparent',
+                  color: isActive ? '#ffffff' : 'var(--text-secondary)',
+                  transition: 'color 0.2s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.375rem',
                 }}
                 onMouseEnter={(e) => {
-                  if (!isActive) {
-                    e.currentTarget.style.color = 'var(--text-primary)';
-                    e.currentTarget.style.backgroundColor = 'var(--bg-card)';
-                  }
+                  e.currentTarget.style.color = '#ffffff';
+                  const highlight = e.currentTarget.querySelector('.nav-highlight') as HTMLElement;
+                  if (highlight) highlight.style.opacity = '1';
                 }}
                 onMouseLeave={(e) => {
-                  if (!isActive) {
-                    e.currentTarget.style.color = 'var(--text-secondary)';
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                  }
+                  if (!isActive) e.currentTarget.style.color = 'var(--text-secondary)';
+                  const highlight = e.currentTarget.querySelector('.nav-highlight') as HTMLElement;
+                  if (highlight && !isActive) highlight.style.opacity = '0';
                 }}
               >
+                {/* Pill background hover effect */}
+                <div
+                  className="nav-highlight"
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    borderRadius: '9999px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    opacity: isActive ? 1 : 0,
+                    transition: 'opacity 0.2s ease',
+                    zIndex: -1,
+                  }}
+                />
                 {link.name}
+                {link.path.startsWith('http') && (
+                  <span style={{ fontSize: '0.7rem', opacity: 0.7 }}>↗</span>
+                )}
               </a>
             );
           })}
         </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 }
