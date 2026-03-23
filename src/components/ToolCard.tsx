@@ -1,7 +1,9 @@
 /**
- * ToolCard.tsx — Premium animated glassmorphic card for homepage grid
+ * ToolCard.tsx — Ultra-Premium Micro-Interactive Card
+ * Inspired by modern design systems (designspells.com, linear, vercel)
  */
-import React from 'react';
+import React, { useState } from 'react';
+import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
 
 interface ToolCardProps {
   title: string;
@@ -12,120 +14,140 @@ interface ToolCardProps {
   glowColor?: string;
 }
 
-export default function ToolCard({ title, description, icon, href, color, glowColor = 'rgba(255,255,255,0.1)' }: ToolCardProps) {
+export default function ToolCard({ title, description, icon, href, color, glowColor }: ToolCardProps) {
+  let mouseX = useMotionValue(0);
+  let mouseY = useMotionValue(0);
+  const [isHovered, setIsHovered] = useState(false);
+  
+  function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
+    let { left, top } = currentTarget.getBoundingClientRect();
+    mouseX.set(clientX - left);
+    mouseY.set(clientY - top);
+  }
+
+  const baseGlow = glowColor || color;
+  
   return (
-    <a
+    <motion.a
       href={href}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      // 1. Smooth Scale & Tactile Click Feedback
+      whileHover={{ scale: 1.02, y: -4 }}
+      whileTap={{ scale: 0.97 }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
       style={{
-        display: 'block',
-        padding: '1.75rem',
-        borderRadius: '16px',
-        border: '1px solid var(--border)',
-        backgroundColor: 'var(--bg-card)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        textDecoration: 'none',
-        color: 'inherit',
-        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-        cursor: 'pointer',
         position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '1.75rem',
+        borderRadius: '24px',
+        backgroundColor: 'rgba(255, 255, 255, 0.02)',
+        border: '1px solid rgba(255,255,255,0.05)',
+        textDecoration: 'none',
         overflow: 'hidden',
-        zIndex: 1,
-      }}
-      onMouseEnter={(e) => {
-        const el = e.currentTarget;
-        el.style.borderColor = color;
-        el.style.transform = 'translateY(-6px) scale(1.02)';
-        el.style.boxShadow = `0 20px 40px -10px ${glowColor}`;
-        el.style.backgroundColor = 'var(--bg-elevated)';
-        
-        // Icon animation
-        const iconDiv = el.querySelector('.tool-icon') as HTMLElement;
-        if (iconDiv) {
-          iconDiv.style.transform = 'scale(1.1)';
-          iconDiv.style.boxShadow = `0 0 20px ${glowColor}`;
-        }
-      }}
-      onMouseLeave={(e) => {
-        const el = e.currentTarget;
-        el.style.borderColor = 'var(--border)';
-        el.style.transform = 'translateY(0) scale(1)';
-        el.style.boxShadow = 'none';
-        el.style.backgroundColor = 'var(--bg-card)';
-        
-        // Icon animation
-        const iconDiv = el.querySelector('.tool-icon') as HTMLElement;
-        if (iconDiv) {
-          iconDiv.style.transform = 'scale(1)';
-          iconDiv.style.boxShadow = 'none';
-        }
+        boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+        cursor: 'pointer',
+        height: '100%',
+        willChange: 'transform' // Performance optimization
       }}
     >
-      {/* Icon */}
-      <div
-        className="tool-icon"
+      {/* 2. Hover Glow: Background radial gradient following mouse */}
+      <motion.div
         style={{
-          width: '56px',
-          height: '56px',
-          borderRadius: '14px',
-          backgroundColor: `${color}15`,
-          border: `1px solid ${color}30`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '1.75rem',
-          color: color,
-          marginBottom: '1.25rem',
-          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          pointerEvents: 'none',
+          opacity: isHovered ? 1 : 0,
+          transition: 'opacity 0.4s ease',
+          background: useMotionTemplate`
+            radial-gradient(
+              400px circle at ${mouseX}px ${mouseY}px,
+              ${baseGlow.replace('0.4', '0.12')},
+              transparent 80%
+            )
+          `
         }}
-      >
-        {icon}
+      />
+      
+      {/* 2. Hover Glow: Border illumination following mouse */}
+      <motion.div
+        style={{
+          position: 'absolute',
+          inset: '-1px',
+          borderRadius: '25px',
+          padding: '1px',
+          background: useMotionTemplate`
+            radial-gradient(
+              250px circle at ${mouseX}px ${mouseY}px,
+              ${color},
+              transparent 80%
+            )
+          `,
+          WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+          WebkitMaskComposite: 'xor',
+          maskComposite: 'exclude',
+          pointerEvents: 'none',
+          opacity: isHovered ? 1 : 0,
+          transition: 'opacity 0.4s ease',
+        }}
+      />
+
+      <div style={{
+        width: '56px',
+        height: '56px',
+        borderRadius: '16px',
+        backgroundColor: `color-mix(in srgb, ${color} 15%, transparent)`,
+        border: `1px solid color-mix(in srgb, ${color} 30%, transparent)`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '1.75rem',
+        color: color,
+        marginBottom: '1.5rem',
+        boxShadow: isHovered ? `0 8px 30px ${baseGlow}` : 'none',
+        transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+        transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+        position: 'relative',
+        zIndex: 1
+      }}>
+        <motion.div
+          animate={{ rotate: isHovered ? [0, -10, 10, -5, 5, 0] : 0 }}
+          transition={{ duration: 0.5, ease: 'easeInOut' }}
+        >
+          {icon}
+        </motion.div>
       </div>
 
-      {/* Title */}
-      <h3
-        style={{
-          fontFamily: "'Outfit', sans-serif",
-          fontSize: '1.375rem',
-          fontWeight: 700,
-          marginBottom: '0.625rem',
-          color: 'var(--text-primary)',
-          letterSpacing: '-0.01em',
-        }}
-      >
+      <h3 style={{
+        fontFamily: "'Outfit', sans-serif",
+        fontSize: '1.375rem',
+        fontWeight: 700,
+        color: isHovered ? '#fff' : 'var(--text-primary)',
+        margin: '0 0 0.5rem 0',
+        letterSpacing: '-0.01em',
+        transition: 'color 0.3s ease',
+        position: 'relative',
+        zIndex: 1
+      }}>
         {title}
       </h3>
 
-      {/* Description */}
-      <p
-        style={{
-          fontSize: '0.9375rem',
-          color: 'var(--text-secondary)',
-          lineHeight: 1.6,
-        }}
-      >
+      <p style={{
+        fontSize: '0.9375rem',
+        color: isHovered ? 'rgba(255,255,255,0.8)' : 'var(--text-secondary)',
+        lineHeight: 1.6,
+        margin: 0,
+        transition: 'color 0.3s ease',
+        position: 'relative',
+        zIndex: 1
+      }}>
         {description}
       </p>
-
-      {/* Arrow indicator (styled like a mini button) */}
-      <div
-        style={{
-          marginTop: '1.5rem',
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '0.375rem',
-          fontSize: '0.875rem',
-          fontWeight: 600,
-          color: 'var(--text-primary)',
-          backgroundColor: 'var(--bg-secondary)',
-          padding: '0.375rem 0.875rem',
-          borderRadius: '20px',
-          border: '1px solid var(--border)',
-          transition: 'background-color 0.2s',
-        }}
-      >
-        Open tool <span style={{ color: color }}>→</span>
-      </div>
-    </a>
+    </motion.a>
   );
 }
