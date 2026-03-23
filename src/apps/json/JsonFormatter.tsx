@@ -60,52 +60,64 @@ export default function JsonFormatter() {
       leftTitle="Input"
       rightTitle="Output"
       leftActions={
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '0.625rem', alignItems: 'center' }}>
           {/* Indent size selector */}
           <select
             value={indentSize}
             onChange={(e) => setIndentSize(Number(e.target.value))}
             style={{
-              padding: '0.25rem 0.5rem',
-              borderRadius: '4px',
+              padding: '0.375rem 0.75rem',
+              borderRadius: '8px',
               border: '1px solid var(--border)',
-              backgroundColor: 'var(--bg-elevated)',
-              color: 'var(--text-secondary)',
+              backgroundColor: 'rgba(255, 255, 255, 0.03)',
+              color: 'var(--text-primary)',
               fontSize: '0.75rem',
+              fontFamily: "'Inter', sans-serif",
+              fontWeight: 500,
               cursor: 'pointer',
+              outline: 'none',
+              transition: 'all 0.2s',
             }}
           >
-            <option value={2}>2 spaces</option>
-            <option value={4}>4 spaces</option>
-            <option value={1}>1 tab</option>
+            <option value={2} style={{ background: 'var(--bg-secondary)' }}>2 spaces</option>
+            <option value={4} style={{ background: 'var(--bg-secondary)' }}>4 spaces</option>
+            <option value={1} style={{ background: 'var(--bg-secondary)' }}>1 tab</option>
           </select>
           <button
             onClick={minifyJson}
             style={{
-              padding: '0.375rem 0.75rem',
-              borderRadius: '6px',
+              padding: '0.375rem 0.875rem',
+              borderRadius: '8px',
               border: '1px solid var(--border)',
-              backgroundColor: 'var(--bg-elevated)',
-              color: 'var(--text-secondary)',
+              backgroundColor: 'rgba(255, 255, 255, 0.03)',
+              color: 'var(--text-primary)',
               fontSize: '0.75rem',
-              fontWeight: 500,
+              fontFamily: "'Inter', sans-serif",
+              fontWeight: 600,
               cursor: 'pointer',
+              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
             }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)'; e.currentTarget.style.borderColor = 'var(--border-hover)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.03)'; e.currentTarget.style.borderColor = 'var(--border)'; }}
           >
             Minify
           </button>
           <button
             onClick={() => { setInput(''); setOutput(''); setError(''); }}
             style={{
-              padding: '0.375rem 0.75rem',
-              borderRadius: '6px',
+              padding: '0.375rem 0.875rem',
+              borderRadius: '8px',
               border: '1px solid var(--border)',
-              backgroundColor: 'var(--bg-elevated)',
-              color: 'var(--text-secondary)',
+              backgroundColor: 'rgba(255, 255, 255, 0.03)',
+              color: 'var(--text-primary)',
               fontSize: '0.75rem',
-              fontWeight: 500,
+              fontFamily: "'Inter', sans-serif",
+              fontWeight: 600,
               cursor: 'pointer',
+              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
             }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.15)'; e.currentTarget.style.color = 'var(--error)'; e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.3)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.03)'; e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.borderColor = 'var(--border)'; }}
           >
             Clear
           </button>

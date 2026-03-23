@@ -1,10 +1,9 @@
 ---
-// index.astro — Homepage with grid of all available tools
+// index.astro — Homepage premium redesign
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.tsx';
 import ToolCard from '../components/ToolCard.tsx';
 
-// Category definitions for the homepage grid
 const categories = [
   {
     name: 'Developer Tools',
@@ -16,13 +15,15 @@ const categories = [
         icon: '{ }',
         href: '/json',
         color: '#f59e0b',
+        glowColor: 'rgba(245, 158, 11, 0.4)',
       },
       {
         title: 'Regex Tester',
         description: 'Test regular expressions against sample text with real-time match highlighting.',
         icon: '.*',
         href: '/regex',
-        color: '#22c55e',
+        color: '#10b981',
+        glowColor: 'rgba(16, 185, 129, 0.4)',
       },
     ],
   },
@@ -35,7 +36,8 @@ const categories = [
         description: 'Encode text to Base64 or decode Base64 strings back to plain text instantly.',
         icon: '⇋',
         href: '/base64',
-        color: '#6366f1',
+        color: '#8b5cf6',
+        glowColor: 'rgba(139, 92, 246, 0.4)',
       },
     ],
   },
@@ -45,30 +47,42 @@ const categories = [
 <Layout title="Home">
   <Navbar currentPath="/" />
 
-  <main style="max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem;">
-    {/* Hero Section */}
-    <div style="text-align: center; margin-bottom: 4rem; padding-top: 2rem;">
-      <h1 style="font-size: 2.5rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 0.75rem;">
-        Mini <span style="background: linear-gradient(135deg, #6366f1, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Labs</span>
+  {/* Ambient Background Orbs */}
+  <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100vh', overflow: 'hidden', zIndex: -1, pointerEvents: 'none' }}>
+    <div style={{ position: 'absolute', top: '-10%', left: '20%', width: '400px', height: '400px', background: 'rgba(59, 130, 246, 0.25)', filter: 'blur(120px)', borderRadius: '50%' }}></div>
+    <div style={{ position: 'absolute', top: '10%', right: '20%', width: '300px', height: '300px', background: 'rgba(139, 92, 246, 0.25)', filter: 'blur(120px)', borderRadius: '50%' }}></div>
+  </div>
+
+  <main style="max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; position: relative;">
+    {/* Premium Hero Section */}
+    <div style="text-align: center; margin-bottom: 6rem; padding-top: 4rem;">
+      <h1 style="font-size: 4rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 1rem; line-height: 1.1;">
+        Supercharge your <br />
+        <span class="text-gradient">Developer Workflow</span>
       </h1>
-      <p style="font-size: 1.125rem; color: var(--text-secondary); max-width: 480px; margin: 0 auto;">
-        A collection of fast, modern developer tools. <br/>No sign-up, no tracking — just tools.
+      <p style="font-size: 1.25rem; font-weight: 400; color: var(--text-secondary); max-width: 540px; margin: 0 auto;">
+        An all-in-one suite of instantly accessible, modern developer tools. No sign-up, no tracking — just extreme speed.
       </p>
+      
+      {/* Down arrow indicator */}
+      <div style="margin-top: 3rem; animation: bounce 2s infinite;">
+        <span style="font-size: 1.5rem; color: var(--text-muted);">↓</span>
+      </div>
     </div>
 
     {/* Categories Grid */}
-    <div id="categories" style="display: flex; flex-direction: column; gap: 3rem;">
+    <div id="categories" style="display: flex; flex-direction: column; gap: 5rem;">
       {categories.map((category) => (
         <section>
-          <div style="margin-bottom: 1.5rem;">
-            <h2 style="font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">
+          <div style="margin-bottom: 2rem;">
+            <h2 style="font-size: 1.875rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em;">
               {category.name}
             </h2>
-            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+            <p style="font-size: 1rem; color: var(--text-secondary);">
               {category.description}
             </p>
           </div>
-          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem;">
             {category.tools.map((tool) => (
               <ToolCard
                 title={tool.title}
@@ -76,6 +90,7 @@ const categories = [
                 icon={tool.icon}
                 href={tool.href}
                 color={tool.color}
+                glowColor={tool.glowColor}
               />
             ))}
           </div>
@@ -84,10 +99,17 @@ const categories = [
     </div>
 
     {/* Footer */}
-    <footer style="text-align: center; margin-top: 4rem; padding: 2rem 0; border-top: 1px solid var(--border);">
-      <p style="font-size: 0.8125rem; color: var(--text-muted);">
-        Built with Astro + React · Open Source
+    <footer style="text-align: center; margin-top: 8rem; padding: 3rem 0; border-top: 1px solid var(--border);">
+      <p style="font-size: 0.875rem; color: var(--text-muted);">
+        Built with Astro + React · Premium Edition
       </p>
     </footer>
   </main>
+
+  <style>
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
+    }
+  </style>
 </Layout>

@@ -136,7 +136,7 @@ export default function RegexTester() {
   ];
 
   const toggleFlag = (flag: string) => {
-    setFlags((prev) => (prev.includes(flag) ? prev.replace(flag, '') : prev + flag));
+    setFlags(flags.includes(flag) ? flags.replace(flag, '') : flags + flag);
   };
 
   return (
@@ -147,14 +147,16 @@ export default function RegexTester() {
           display: 'flex',
           alignItems: 'center',
           gap: '0.5rem',
-          padding: '0.75rem 1rem',
-          borderRadius: '12px',
+          padding: '0.875rem 1.25rem',
+          borderRadius: '16px',
           border: '1px solid var(--border)',
-          backgroundColor: 'var(--bg-card)',
+          backgroundColor: 'var(--bg-secondary)',
+          boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
           flexWrap: 'wrap',
+          position: 'relative',
         }}
       >
-        <span style={{ color: 'var(--text-muted)', fontSize: '1.25rem', fontFamily: 'monospace' }}>/</span>
+        <span style={{ color: 'var(--accent-purple)', fontSize: '1.25rem', fontFamily: 'monospace', fontWeight: 600 }}>/</span>
         <input
           type="text"
           value={pattern}
@@ -169,32 +171,35 @@ export default function RegexTester() {
             border: 'none',
             color: 'var(--text-primary)',
             fontFamily: "'JetBrains Mono', monospace",
-            fontSize: '0.875rem',
+            fontSize: '0.9375rem',
             outline: 'none',
           }}
         />
-        <span style={{ color: 'var(--text-muted)', fontSize: '1.25rem', fontFamily: 'monospace' }}>/</span>
+        <span style={{ color: 'var(--accent-purple)', fontSize: '1.25rem', fontFamily: 'monospace', fontWeight: 600 }}>/</span>
 
         {/* Flag toggles */}
-        <div style={{ display: 'flex', gap: '0.25rem' }}>
+        <div style={{ display: 'flex', gap: '0.375rem' }}>
           {flagOptions.map(({ flag, label }) => (
             <button
               key={flag}
               onClick={() => toggleFlag(flag)}
               title={label}
               style={{
-                padding: '0.375rem 0.5rem',
-                borderRadius: '4px',
+                padding: '0.375rem 0.625rem',
+                borderRadius: '6px',
                 border: '1px solid',
-                borderColor: flags.includes(flag) ? 'var(--accent)' : 'var(--border)',
-                backgroundColor: flags.includes(flag) ? 'var(--accent-glow)' : 'transparent',
-                color: flags.includes(flag) ? 'var(--accent-hover)' : 'var(--text-muted)',
-                fontSize: '0.75rem',
+                borderColor: flags.includes(flag) ? 'var(--accent-purple)' : 'var(--border)',
+                backgroundColor: flags.includes(flag) ? 'rgba(139, 92, 246, 0.15)' : 'rgba(255, 255, 255, 0.02)',
+                color: flags.includes(flag) ? '#fff' : 'var(--text-secondary)',
+                fontSize: '0.8125rem',
                 fontWeight: 600,
-                fontFamily: 'monospace',
+                fontFamily: "'JetBrains Mono', monospace",
                 cursor: 'pointer',
-                transition: 'all 0.15s ease',
+                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                boxShadow: flags.includes(flag) ? '0 0 10px rgba(139, 92, 246, 0.3)' : 'none',
               }}
+              onMouseEnter={(e) => { if (!flags.includes(flag)) { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = '#fff'; } }}
+              onMouseLeave={(e) => { if (!flags.includes(flag)) { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.02)'; e.currentTarget.style.color = 'var(--text-secondary)'; } }}
             >
               {flag}
             </button>
@@ -206,11 +211,12 @@ export default function RegexTester() {
           <span
             style={{
               padding: '0.25rem 0.625rem',
-              borderRadius: '4px',
-              backgroundColor: 'rgba(239, 68, 68, 0.15)',
+              borderRadius: '6px',
+              backgroundColor: 'rgba(244, 63, 94, 0.15)',
+              border: '1px solid rgba(244, 63, 94, 0.3)',
               color: 'var(--error)',
               fontSize: '0.75rem',
-              fontWeight: 500,
+              fontWeight: 600,
             }}
           >
             ⚠ {error}
@@ -223,7 +229,7 @@ export default function RegexTester() {
         style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
-          gap: '1rem',
+          gap: '1.25rem',
           flex: 1,
           minHeight: 0,
         }}
@@ -234,10 +240,11 @@ export default function RegexTester() {
           style={{
             display: 'flex',
             flexDirection: 'column',
-            borderRadius: '12px',
+            borderRadius: '16px',
             border: '1px solid var(--border)',
-            backgroundColor: 'var(--bg-card)',
+            backgroundColor: 'var(--bg-secondary)',
             overflow: 'hidden',
+            boxShadow: '0 10px 40px -10px rgba(0,0,0,0.5)',
           }}
         >
           <div
@@ -245,26 +252,30 @@ export default function RegexTester() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              padding: '0.75rem 1rem',
+              padding: '0.875rem 1.25rem',
               borderBottom: '1px solid var(--border)',
-              backgroundColor: 'var(--bg-secondary)',
+              backgroundColor: 'rgba(255, 255, 255, 0.02)',
             }}
           >
-            <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+            <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-secondary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
               Test String
             </span>
             <button
               onClick={() => setTestString('')}
               style={{
-                padding: '0.375rem 0.75rem',
-                borderRadius: '6px',
+                padding: '0.375rem 0.875rem',
+                borderRadius: '8px',
                 border: '1px solid var(--border)',
-                backgroundColor: 'var(--bg-elevated)',
-                color: 'var(--text-secondary)',
+                backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                color: 'var(--text-primary)',
                 fontSize: '0.75rem',
-                fontWeight: 500,
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 600,
                 cursor: 'pointer',
+                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
               }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(244, 63, 94, 0.15)'; e.currentTarget.style.color = 'var(--error)'; e.currentTarget.style.borderColor = 'rgba(244, 63, 94, 0.3)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.03)'; e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.borderColor = 'var(--border)'; }}
             >
               Clear
             </button>

@@ -56,15 +56,17 @@ export default function Base64Tool() {
 
   // Toggle mode button styles
   const getModeButtonStyle = (btnMode: Mode) => ({
-    padding: '0.375rem 0.875rem',
-    borderRadius: '6px',
+    padding: '0.5rem 1.25rem',
+    borderRadius: '10px',
     border: 'none',
-    fontSize: '0.75rem',
+    fontSize: '0.8125rem',
+    fontFamily: "'Inter', sans-serif",
     fontWeight: 600 as const,
     cursor: 'pointer' as const,
-    transition: 'all 0.15s ease',
-    backgroundColor: mode === btnMode ? 'var(--accent)' : 'transparent',
-    color: mode === btnMode ? '#fff' : 'var(--text-secondary)',
+    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    backgroundColor: mode === btnMode ? 'var(--accent-purple)' : 'transparent',
+    color: mode === btnMode ? '#ffffff' : 'var(--text-secondary)',
+    boxShadow: mode === btnMode ? '0 4px 15px rgba(139, 92, 246, 0.4)' : 'none',
   });
 
   return (
@@ -74,10 +76,10 @@ export default function Base64Tool() {
         style={{
           display: 'inline-flex',
           padding: '4px',
-          borderRadius: '8px',
-          backgroundColor: 'var(--bg-card)',
+          borderRadius: '12px',
+          backgroundColor: 'rgba(255,255,255,0.02)',
           border: '1px solid var(--border)',
-          marginBottom: '1rem',
+          marginBottom: '1.5rem',
         }}
       >
         <button style={getModeButtonStyle('encode')} onClick={() => setMode('encode')}>
@@ -95,15 +97,19 @@ export default function Base64Tool() {
           <button
             onClick={() => { setInput(''); setOutput(''); setError(''); }}
             style={{
-              padding: '0.375rem 0.75rem',
-              borderRadius: '6px',
+              padding: '0.375rem 0.875rem',
+              borderRadius: '8px',
               border: '1px solid var(--border)',
-              backgroundColor: 'var(--bg-elevated)',
-              color: 'var(--text-secondary)',
+              backgroundColor: 'rgba(255, 255, 255, 0.03)',
+              color: 'var(--text-primary)',
               fontSize: '0.75rem',
-              fontWeight: 500,
+              fontFamily: "'Inter', sans-serif",
+              fontWeight: 600,
               cursor: 'pointer',
+              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
             }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.15)'; e.currentTarget.style.color = 'var(--error)'; e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.3)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.03)'; e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.borderColor = 'var(--border)'; }}
           >
             Clear
           </button>

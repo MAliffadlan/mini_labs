@@ -33,34 +33,39 @@ export default function CopyButton({ text, label = 'Copy' }: CopyButtonProps) {
     <button
       onClick={handleCopy}
       style={{
-        padding: '0.375rem 0.75rem',
-        borderRadius: '6px',
-        border: '1px solid var(--border)',
-        backgroundColor: copied ? 'rgba(34, 197, 94, 0.15)' : 'var(--bg-elevated)',
-        color: copied ? 'var(--success)' : 'var(--text-secondary)',
+        padding: '0.375rem 0.875rem',
+        borderRadius: '8px',
+        border: '1px solid',
+        borderColor: copied ? 'rgba(16, 185, 129, 0.3)' : 'var(--border)',
+        backgroundColor: copied ? 'rgba(16, 185, 129, 0.1)' : 'rgba(255, 255, 255, 0.03)',
+        color: copied ? 'var(--success)' : 'var(--text-primary)',
         fontSize: '0.75rem',
-        fontWeight: 500,
+        fontWeight: 600,
+        fontFamily: "'Inter', sans-serif",
         cursor: 'pointer',
-        transition: 'all 0.15s ease',
+        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
         display: 'flex',
         alignItems: 'center',
-        gap: '0.375rem',
+        gap: '0.5rem',
         whiteSpace: 'nowrap',
+        boxShadow: copied ? '0 0 10px rgba(16, 185, 129, 0.2)' : 'none',
       }}
       onMouseEnter={(e) => {
         if (!copied) {
           e.currentTarget.style.borderColor = 'var(--border-hover)';
-          e.currentTarget.style.color = 'var(--text-primary)';
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.06)';
+          e.currentTarget.style.transform = 'translateY(-1px)';
         }
       }}
       onMouseLeave={(e) => {
         if (!copied) {
           e.currentTarget.style.borderColor = 'var(--border)';
-          e.currentTarget.style.color = 'var(--text-secondary)';
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
+          e.currentTarget.style.transform = 'translateY(0)';
         }
       }}
     >
-      {copied ? '✓ Copied' : `⎘ ${label}`}
+      {copied ? '✓ Copied!' : `⎘ ${label}`}
     </button>
   );
 }
