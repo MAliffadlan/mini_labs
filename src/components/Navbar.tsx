@@ -7,10 +7,9 @@ interface NavbarProps {
   currentPath?: string;
 }
 
-const tools = [
-  { name: 'JSON', path: '/json' },
-  { name: 'Base64', path: '/base64' },
-  { name: 'Regex', path: '/regex' },
+const navLinks = [
+  { name: 'Home', path: '/' },
+  { name: 'Categories', path: '/#categories' },
 ];
 
 export default function Navbar({ currentPath = '/' }: NavbarProps) {
@@ -69,12 +68,12 @@ export default function Navbar({ currentPath = '/' }: NavbarProps) {
 
         {/* Navigation Links */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-          {tools.map((tool) => {
-            const isActive = currentPath === tool.path;
+          {navLinks.map((link) => {
+            const isActive = currentPath === link.path;
             return (
               <a
-                key={tool.path}
-                href={tool.path}
+                key={link.path}
+                href={link.path}
                 style={{
                   padding: '0.375rem 0.75rem',
                   borderRadius: '6px',
@@ -98,7 +97,7 @@ export default function Navbar({ currentPath = '/' }: NavbarProps) {
                   }
                 }}
               >
-                {tool.name}
+                {link.name}
               </a>
             );
           })}
