@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.tsx';
-import CountdownTimer from '../apps/time/CountdownTimer.tsx';
+import CountdownTimerApp from '../apps/time/CountdownTimer.tsx';
 ---
 
 <Layout title="Countdown Timer - Mini Labs">
@@ -17,6 +17,6 @@ import CountdownTimer from '../apps/time/CountdownTimer.tsx';
       </p>
     </div>
 
-    <CountdownTimer client:load />
+    <CountdownTimerApp client:load />
   </main>
 </Layout>

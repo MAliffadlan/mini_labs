@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.tsx';
-import HexRgbConverter from '../apps/color/HexRgbConverter.tsx';
+import HexRgbConverterApp from '../apps/color/HexRgbConverter.tsx';
 ---
 
 <Layout title="HEX ↔ RGB Converter - Mini Labs">
@@ -17,6 +17,6 @@ import HexRgbConverter from '../apps/color/HexRgbConverter.tsx';
       </p>
     </div>
 
-    <HexRgbConverter client:load />
+    <HexRgbConverterApp client:load />
   </main>
 </Layout>

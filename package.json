@@ -32,8 +32,10 @@
     "tailwindcss": "^4.2.2"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.8",
     "@types/crypto-js": "^4.2.2",
     "@types/dompurify": "^3.0.5",
-    "@types/marked": "^5.0.2"
+    "@types/marked": "^5.0.2",
+    "typescript": "^5.9.3"
   }
 }

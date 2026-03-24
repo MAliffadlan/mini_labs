@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.tsx';
-import TimestampConverter from '../apps/time/TimestampConverter.tsx';
+import TimestampConverterApp from '../apps/time/TimestampConverter.tsx';
 ---
 
 <Layout title="Timestamp Converter - Mini Labs">
@@ -17,6 +17,6 @@ import TimestampConverter from '../apps/time/TimestampConverter.tsx';
       </p>
     </div>
 
-    <TimestampConverter client:load />
+    <TimestampConverterApp client:load />
   </main>
 </Layout>

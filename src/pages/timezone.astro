@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.tsx';
-import TimezoneConverter from '../apps/time/TimezoneConverter.tsx';
+import TimezoneConverterApp from '../apps/time/TimezoneConverter.tsx';
 ---
 
 <Layout title="Timezone Converter - Mini Labs">
@@ -17,6 +17,6 @@ import TimezoneConverter from '../apps/time/TimezoneConverter.tsx';
       </p>
     </div>
 
-    <TimezoneConverter client:load />
+    <TimezoneConverterApp client:load />
   </main>
 </Layout>

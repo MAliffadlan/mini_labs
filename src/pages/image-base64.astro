@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.tsx';
-import ImageBase64 from '../apps/dev/ImageBase64.tsx';
+import ImageBase64App from '../apps/dev/ImageBase64.tsx';
 ---
 <Layout title="Image ↔ Base64 - Mini Labs">
   <Navbar client:load currentPath="/image-base64" />
@@ -10,6 +10,6 @@ import ImageBase64 from '../apps/dev/ImageBase64.tsx';
       <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em;">Image ↔ Base64</h1>
       <p style="font-size: 1.0625rem; color: var(--text-secondary); max-width: 600px; line-height: 1.6;">Convert images to Base64 strings or decode Base64 back to images.</p>
     </div>
-    <ImageBase64 client:load />
+    <ImageBase64App client:load />
   </main>
 </Layout>

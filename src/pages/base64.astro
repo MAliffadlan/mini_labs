@@ -3,7 +3,7 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.tsx';
 import ToolPageShell from '../components/ToolPageShell.tsx';
-import Base64Tool from '../apps/base64/Base64Tool.tsx';
+import Base64ToolApp from '../apps/base64/Base64Tool.tsx';
 
 const suggestions = [
   { title: 'URL Encoder/Decoder', icon: '🔗', href: '/url-encoder', color: '#06b6d4' },
@@ -20,7 +20,7 @@ const suggestions = [
         <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em;">Base64 Encoder/Decoder</h1>
         <p style="font-size: 1.0625rem; color: var(--text-secondary); max-width: 600px; line-height: 1.6;">Encode text to Base64 or decode Base64 strings back to plain text.</p>
       </div>
-      <Base64Tool client:only="react" />
+      <Base64ToolApp client:only="react" />
     </ToolPageShell>
   </main>
 </Layout>
