@@ -1,8 +1,11 @@
 /**
- * SearchableTools.tsx — Real-time animated search and Tabs UI Filter
+ * SearchableTools.tsx — Real-time animated Tabs UI Filter
+ * Reads search query from shared nanostores atom.
  */
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useStore } from '@nanostores/react';
+import { $searchQuery } from '../stores/searchStore';
 import ToolCard from './ToolCard';
 
 interface Tool {
@@ -21,7 +24,7 @@ interface SearchableToolsProps {
 }
 
 export default function SearchableTools({ tools }: SearchableToolsProps) {
-  const [query, setQuery] = useState('');
+  const query = useStore($searchQuery);
   const [activeTab, setActiveTab] = useState('All');
 
   const tabs = ['All', 'Popular', 'Text', 'Dev', 'Utility'];
@@ -48,155 +51,71 @@ export default function SearchableTools({ tools }: SearchableToolsProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
       
-      {/* Aesthetic Search Bar & Filter Tabs */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem', alignItems: 'center' }}>
-        
-        {/* Search Bar */}
-        <motion.div 
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
-          style={{ position: 'relative', maxWidth: '640px', margin: '0 auto', width: '100%', zIndex: 10 }}
-        >
-          <div style={{
-            position: 'absolute',
-            top: '50%',
-            left: '1.25rem',
-            transform: 'translateY(-50%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'var(--text-muted)',
-            transition: 'color 0.3s ease'
-          }}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-          </div>
-          
-          <input 
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search for tools, encoders, formatters..."
-            spellCheck={false}
+      {/* Tab Filter Bar */}
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut', delay: 0.2 }}
+        style={{ 
+          display: 'flex', 
+          gap: '0.5rem', 
+          padding: '0.375rem', 
+          backgroundColor: 'rgba(255,255,255,0.02)', 
+          borderRadius: '9999px',
+          border: '1px solid var(--border)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+          overflowX: 'auto',
+          maxWidth: '100%',
+          scrollbarWidth: 'none',
+          margin: '0 auto',
+        }}
+      >
+        {tabs.map(tab => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
             style={{
-              width: '100%',
-              padding: '1.25rem 1.25rem 1.25rem 3.5rem',
+              position: 'relative',
+              padding: '0.625rem 1.5rem',
               borderRadius: '9999px',
-              backgroundColor: 'rgba(255, 255, 255, 0.03)',
-              border: '1px solid var(--border)',
-              color: 'var(--text-primary)',
-              fontSize: '1.0625rem',
+              border: 'none',
+              backgroundColor: 'transparent',
+              color: activeTab === tab ? 'var(--text-primary)' : 'var(--text-secondary)',
+              fontSize: '0.9375rem',
               fontFamily: "'Inter', sans-serif",
+              fontWeight: activeTab === tab ? 600 : 500,
+              cursor: 'pointer',
+              transition: 'color 0.2s ease',
               outline: 'none',
-              backdropFilter: 'blur(12px)',
-              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.2)'
+              whiteSpace: 'nowrap'
             }}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor = 'var(--accent-purple)';
-              e.currentTarget.style.boxShadow = '0 0 24px rgba(139, 92, 246, 0.2)';
-              e.currentTarget.style.backgroundColor = 'var(--bg-card)';
-              const svg = e.currentTarget.parentElement?.querySelector('svg');
-              if (svg) svg.style.color = 'var(--accent-purple)';
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderColor = 'var(--border)';
-              e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.2)';
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
-              const svg = e.currentTarget.parentElement?.querySelector('svg');
-              if (svg) svg.style.color = 'var(--text-muted)';
-            }}
-          />
-          
-          <AnimatePresence>
-            {query && (
-              <motion.button
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                onClick={() => setQuery('')}
+            onMouseEnter={(e) => { if (activeTab !== tab) e.currentTarget.style.color = 'var(--text-primary)'; }}
+            onMouseLeave={(e) => { if (activeTab !== tab) e.currentTarget.style.color = 'var(--text-secondary)'; }}
+          >
+            {activeTab === tab && (
+              <motion.div
+                layoutId="activeTabPill"
                 style={{
-                  position: 'absolute', top: '50%', right: '1.25rem', transform: 'translateY(-50%)',
-                  background: 'rgba(255,255,255,0.08)', border: 'none', borderRadius: '50%', width: '24px', height: '24px',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--text-secondary)', transition: 'all 0.2s'
+                  position: 'absolute',
+                  inset: 0,
+                  backgroundColor: 'rgba(255,255,255,0.08)',
+                  borderRadius: '9999px',
+                  boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                  border: '1px solid rgba(255,255,255,0.05)',
+                  zIndex: -1
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = '#fff'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
-              >
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-              </motion.button>
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              />
             )}
-          </AnimatePresence>
-        </motion.div>
-
-        {/* Tab Filter Bar (The Game Changer) */}
-        <motion.div 
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: 'easeOut', delay: 0.2 }}
-          style={{ 
-            display: 'flex', 
-            gap: '0.5rem', 
-            padding: '0.375rem', 
-            backgroundColor: 'rgba(255,255,255,0.02)', 
-            borderRadius: '9999px',
-            border: '1px solid var(--border)',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-            overflowX: 'auto',
-            maxWidth: '100%',
-            scrollbarWidth: 'none', // hide scrollbar for firefox
-          }}
-        >
-          {tabs.map(tab => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              style={{
-                position: 'relative',
-                padding: '0.625rem 1.5rem',
-                borderRadius: '9999px',
-                border: 'none',
-                backgroundColor: 'transparent',
-                color: activeTab === tab ? 'var(--text-primary)' : 'var(--text-secondary)',
-                fontSize: '0.9375rem',
-                fontFamily: "'Inter', sans-serif",
-                fontWeight: activeTab === tab ? 600 : 500,
-                cursor: 'pointer',
-                transition: 'color 0.2s ease',
-                outline: 'none',
-                whiteSpace: 'nowrap'
-              }}
-              onMouseEnter={(e) => { if (activeTab !== tab) e.currentTarget.style.color = 'var(--text-primary)'; }}
-              onMouseLeave={(e) => { if (activeTab !== tab) e.currentTarget.style.color = 'var(--text-secondary)'; }}
-            >
-              {activeTab === tab && (
-                <motion.div
-                  layoutId="activeTabPill"
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    backgroundColor: 'rgba(255,255,255,0.08)',
-                    borderRadius: '9999px',
-                    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-                    border: '1px solid rgba(255,255,255,0.05)',
-                    zIndex: -1
-                  }}
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                />
-              )}
-              {tab === 'Popular' && '⭐ '}
-              {tab === 'Text' && '📝 '}
-              {tab === 'Dev' && '👨‍💻 '}
-              {tab === 'Utility' && '🛠️ '}
-              {tab === 'All' && '🧩 '}
-              {tab}
-            </button>
-          ))}
-        </motion.div>
-      </div>
+            {tab === 'Popular' && '⭐ '}
+            {tab === 'Text' && '📝 '}
+            {tab === 'Dev' && '👨‍💻 '}
+            {tab === 'Utility' && '🛠️ '}
+            {tab === 'All' && '🧩 '}
+            {tab}
+          </button>
+        ))}
+      </motion.div>
 
       {/* Grid with Framer Motion Layout Animations */}
       <div id="tools-grid" style={{ display: 'flex', flexDirection: 'column', gap: '4rem', minHeight: '400px' }}>
@@ -215,7 +134,7 @@ export default function SearchableTools({ tools }: SearchableToolsProps) {
                 >
                   <motion.div layout style={{ marginBottom: '2rem' }}>
                     <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <span style={{ color: 'var(--eab308)', textShadow: '0 0 10px rgba(234, 179, 8, 0.4)' }}>⭐</span> Popular Tools
+                      <span style={{ textShadow: '0 0 10px rgba(234, 179, 8, 0.4)' }}>⭐</span> Popular Tools
                     </h2>
                   </motion.div>
                   
@@ -231,7 +150,7 @@ export default function SearchableTools({ tools }: SearchableToolsProps) {
                 </motion.section>
               )}
 
-              {/* Next section for the rest of tools, OR standard flat grid if not "All" */}
+              {/* Standard grid */}
               <motion.section 
                 key="other-section"
                 layout
