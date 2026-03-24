@@ -5,6 +5,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import SplitView from '../../components/SplitView';
 import CopyButton from '../../components/CopyButton';
+import ExportImageButton from '../../components/ExportImageButton';
 import { useAutoSave } from '../../hooks/useAutoSave';
 import { useDragDrop } from '../../hooks/useDragDrop';
 
@@ -129,7 +130,12 @@ export default function JsonFormatter() {
           </button>
         </div>
       }
-      rightActions={<CopyButton text={output} />}
+      rightActions={
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <ExportImageButton getText={() => output} filename="json-formatted" language="json" />
+          <CopyButton text={output} />
+        </div>
+      }
       leftContent={
         <div {...dragProps} style={{ height: '100%', position: 'relative' }}>
           {isDragging && (

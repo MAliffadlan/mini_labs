@@ -6,6 +6,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useStore } from '@nanostores/react';
 import ToastContainer from './Toast';
+import ShareButton from './ShareButton';
 import { trackTool } from '../stores/recentStore';
 import { $favorites, toggleFavorite, isFavorite } from '../stores/favoriteStore';
 import { showToast } from '../stores/toastStore';
@@ -25,6 +26,7 @@ interface ToolPageShellProps {
   toolColor: string;
   suggestions?: SuggestedTool[];
   children: React.ReactNode;
+  getShareData?: () => string;
 }
 
 function FavoriteButton({ toolHref, toolTitle }: { toolHref: string, toolTitle: string }) {
@@ -55,7 +57,7 @@ function FavoriteButton({ toolHref, toolTitle }: { toolHref: string, toolTitle: 
   );
 }
 
-export default function ToolPageShell({ toolTitle, toolIcon, toolHref, toolColor, suggestions = [], children }: ToolPageShellProps) {
+export default function ToolPageShell({ toolTitle, toolIcon, toolHref, toolColor, suggestions = [], children, getShareData }: ToolPageShellProps) {
   // Track this tool on mount
   useEffect(() => {
     trackTool({ title: toolTitle, href: toolHref, icon: toolIcon, color: toolColor });
@@ -75,8 +77,11 @@ export default function ToolPageShell({ toolTitle, toolIcon, toolHref, toolColor
           <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{toolTitle}</span>
         </nav>
         
-        {/* Favorite Button */}
-        <FavoriteButton toolHref={toolHref} toolTitle={toolTitle} />
+        {/* Action Buttons */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          {getShareData && <ShareButton toolPath={toolHref} getData={getShareData} />}
+          <FavoriteButton toolHref={toolHref} toolTitle={toolTitle} />
+        </div>
       </div>
 
       {/* Tool Content */}

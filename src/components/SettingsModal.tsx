@@ -1,20 +1,28 @@
 /**
- * SettingsModal.tsx — Theme toggle (Light/Dark/System) + data management
+ * SettingsModal.tsx — Theme toggle (Light/Dark/System) + Language + data management
  */
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@nanostores/react';
 import { $theme, setTheme, type Theme } from '../stores/themeStore';
+import { $lang, setLang } from '../stores/langStore';
+import type { Lang } from '../i18n/translations';
 import { showToast } from '../stores/toastStore';
 
 export default function SettingsModal() {
   const [isOpen, setIsOpen] = useState(false);
   const theme = useStore($theme);
+  const lang = useStore($lang);
 
   const themes: { value: Theme; label: string; icon: string }[] = [
     { value: 'dark', label: 'Dark', icon: '🌑' },
     { value: 'light', label: 'Light', icon: '☀️' },
     { value: 'system', label: 'System', icon: '💻' },
+  ];
+
+  const languages: { value: Lang; label: string; flag: string }[] = [
+    { value: 'en', label: 'English', flag: '🇬🇧' },
+    { value: 'id', label: 'Indonesia', flag: '🇮🇩' },
   ];
 
   const clearData = () => {
@@ -24,7 +32,7 @@ export default function SettingsModal() {
 
   return (
     <>
-      {/* Gear icon button in top-right */}
+      {/* Gear icon button */}
       <motion.button
         whileHover={{ scale: 1.1, rotate: 90 }}
         whileTap={{ scale: 0.9 }}
@@ -73,13 +81,13 @@ export default function SettingsModal() {
             >
               {/* Header */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: 'var(--text-primary)', fontFamily: "'Outfit', sans-serif" }}>⚙️ Settings</h2>
+                <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: 'var(--text-primary)', fontFamily: "'Outfit', sans-serif" }}>⚙️ {lang === 'id' ? 'Pengaturan' : 'Settings'}</h2>
                 <button onClick={() => setIsOpen(false)} style={{ background: 'rgba(255,255,255,0.08)', border: 'none', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: '1rem' }}>✕</button>
               </div>
 
               {/* Theme selector */}
               <div>
-                <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Appearance</label>
+                <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{lang === 'id' ? 'Tampilan' : 'Appearance'}</label>
                 <div style={{ display: 'flex', gap: '0.75rem' }}>
                   {themes.map(t => (
                     <button key={t.value} onClick={() => { import('../utils/sounds').then(m => m.playTick()); setTheme(t.value); }}
@@ -99,6 +107,28 @@ export default function SettingsModal() {
                 </div>
               </div>
 
+              {/* Language selector */}
+              <div>
+                <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{lang === 'id' ? 'Bahasa' : 'Language'}</label>
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                  {languages.map(l => (
+                    <button key={l.value} onClick={() => { import('../utils/sounds').then(m => m.playTick()); setLang(l.value); showToast(l.value === 'id' ? 'Bahasa diubah ke Indonesia' : 'Language changed to English', l.flag); }}
+                      style={{
+                        flex: 1, padding: '0.875rem', borderRadius: '14px',
+                        border: '1px solid', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.375rem',
+                        backgroundColor: lang === l.value ? 'rgba(59,130,246,0.12)' : 'var(--bg-card)',
+                        borderColor: lang === l.value ? 'rgba(59,130,246,0.35)' : 'var(--border)',
+                        color: lang === l.value ? 'var(--text-primary)' : 'var(--text-secondary)',
+                        transition: 'all 0.2s',
+                      }}
+                    >
+                      <span style={{ fontSize: '1.5rem' }}>{l.flag}</span>
+                      <span style={{ fontSize: '0.8125rem', fontWeight: 600 }}>{l.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* Data management */}
               <div>
                 <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Data</label>
@@ -106,13 +136,13 @@ export default function SettingsModal() {
                   style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid rgba(244,63,94,0.2)', backgroundColor: 'rgba(244,63,94,0.05)', color: '#f43f5e', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', fontFamily: "'Inter', sans-serif" }}
                   onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(244,63,94,0.1)'}
                   onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(244,63,94,0.05)'}
-                >🗑️ Clear All Local Data</button>
-                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Removes recent tools history, saved inputs, and preferences.</p>
+                >🗑️ {lang === 'id' ? 'Hapus Semua Data Lokal' : 'Clear All Local Data'}</button>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>{lang === 'id' ? 'Menghapus riwayat, input tersimpan, dan preferensi.' : 'Removes recent tools history, saved inputs, and preferences.'}</p>
               </div>
 
               {/* Version */}
               <div style={{ textAlign: 'center', paddingTop: '0.5rem', borderTop: '1px solid var(--border)' }}>
-                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Mini Labs v2.0 · 19 Tools</p>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Mini Labs v4.0 · 24 Tools</p>
               </div>
             </motion.div>
           </motion.div>
