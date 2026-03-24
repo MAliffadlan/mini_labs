@@ -4,7 +4,6 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.tsx';
 import SearchableTools from '../components/SearchableTools.tsx';
 import RecentTools from '../components/RecentTools.tsx';
-import FavoriteTools from '../components/FavoriteTools.tsx';
 import ToastContainer from '../components/Toast.tsx';
 
 const allTools = [
@@ -70,9 +69,6 @@ const allTools = [
         <span style="font-size: 1.5rem; color: var(--text-muted);">↓</span>
       </div>
     </div>
-
-    {/* Favorites */}
-    <FavoriteTools client:load allTools={allTools} />
 
     {/* Recently Used Tools */}
     <RecentTools client:load />
