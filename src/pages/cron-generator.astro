@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
+import ToolPageShell from '../components/ToolPageShell.tsx';
+import CronGenerator from '../apps/dev/CronGenerator.tsx';
+
+const suggestions = [
+  { title: 'Timestamp Converter', icon: '⌚', href: '/timestamp', color: '#f43f5e' },
+  { title: 'Countdown Timer', icon: '⏳', href: '/countdown', color: '#eab308' },
+  { title: 'Timezone Converter', icon: '🌍', href: '/timezone', color: '#06b6d4' },
+];
+---
+
+<Layout title="Cron Job Generator - Mini Labs">
+  <Navbar client:load currentPath="/cron-generator" />
+  <main style="max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem;">
+    <ToolPageShell client:load toolTitle="Cron Job Generator" toolIcon="⏰" toolHref="/cron-generator" toolColor="#eab308" suggestions={suggestions}>
+      <div style="margin-bottom: 2.5rem; text-align: center;">
+        <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em;">Cron Job Generator</h1>
+        <p style="font-size: 1.0625rem; color: var(--text-secondary); max-width: 500px; margin: 0 auto; line-height: 1.6;">Build cron expressions visually with quick presets.</p>
+      </div>
+      <CronGenerator client:load />
+    </ToolPageShell>
+  </main>
+</Layout>

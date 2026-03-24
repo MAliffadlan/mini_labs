@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
+import ToolPageShell from '../components/ToolPageShell.tsx';
+import JwtDecoder from '../apps/dev/JwtDecoder.tsx';
+
+const suggestions = [
+  { title: 'Base64 Encoder', icon: '⇋', href: '/base64', color: '#8b5cf6' },
+  { title: 'JSON Formatter', icon: '{}', href: '/json', color: '#3b82f6' },
+  { title: 'URL Encoder', icon: '🔗', href: '/url-encoder', color: '#06b6d4' },
+];
+---
+
+<Layout title="JWT Decoder - Mini Labs">
+  <Navbar client:load currentPath="/jwt-decoder" />
+  <main style="max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem;">
+    <ToolPageShell client:load toolTitle="JWT Decoder" toolIcon="🔑" toolHref="/jwt-decoder" toolColor="#f59e0b" suggestions={suggestions}>
+      <div style="margin-bottom: 2.5rem;">
+        <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em;">JWT Decoder</h1>
+        <p style="font-size: 1.0625rem; color: var(--text-secondary); max-width: 600px; line-height: 1.6;">Decode and inspect JSON Web Tokens — header, payload, and signature.</p>
+      </div>
+      <JwtDecoder client:load />
+    </ToolPageShell>
+  </main>
+</Layout>

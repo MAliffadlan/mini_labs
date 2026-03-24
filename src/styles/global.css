@@ -27,6 +27,23 @@
   --warning: #f59e0b;
 }
 
+/* ===== Light Mode ===== */
+[data-theme="light"] {
+  --bg-primary: #fafafa;
+  --bg-secondary: #f4f4f5;
+  --bg-card: rgba(0, 0, 0, 0.02);
+  --bg-elevated: rgba(0, 0, 0, 0.04);
+  --border: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(0, 0, 0, 0.15);
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
+  --text-muted: #a1a1aa;
+  --accent-glow: rgba(139, 92, 246, 0.1);
+}
+[data-theme="light"] body {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+}
+
 /* ===== Base Styles ===== */
 * {
   margin: 0;

@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
+import ToolPageShell from '../components/ToolPageShell.tsx';
+import TextDiff from '../apps/dev/TextDiff.tsx';
+
+const suggestions = [
+  { title: 'JSON Formatter', icon: '{}', href: '/json', color: '#3b82f6' },
+  { title: 'Case Converter', icon: 'Aa', href: '/case-converter', color: '#f59e0b' },
+  { title: 'Word Counter', icon: '📝', href: '/word-counter', color: '#10b981' },
+];
+---
+
+<Layout title="Text Diff Checker - Mini Labs">
+  <Navbar client:load currentPath="/text-diff" />
+  <main style="max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem;">
+    <ToolPageShell client:load toolTitle="Text Diff Checker" toolIcon="📝" toolHref="/text-diff" toolColor="#10b981" suggestions={suggestions}>
+      <div style="margin-bottom: 2.5rem;">
+        <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em;">Text Diff Checker</h1>
+        <p style="font-size: 1.0625rem; color: var(--text-secondary); max-width: 600px; line-height: 1.6;">Compare two texts side-by-side and spot the differences instantly.</p>
+      </div>
+      <TextDiff client:load />
+    </ToolPageShell>
+  </main>
+</Layout>
