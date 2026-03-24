@@ -5,22 +5,19 @@
  */
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useStore } from '@nanostores/react';
 import { $isCommandPaletteOpen } from '../stores/searchStore';
+import { $lang } from '../stores/langStore';
 
 interface NavbarProps {
   currentPath?: string;
   showSearch?: boolean;
 }
 
-const navLinks = [
-  { name: 'Home', path: '/', icon: '🏠' },
-  { name: 'Categories', path: '/#tools-grid', icon: '📂' },
-  { name: 'GitHub', path: 'https://github.com/MAliffadlan/mini_labs', icon: '🐙' }
-];
-
 export default function Navbar({ currentPath = '/', showSearch = false }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const lang = useStore($lang);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -31,6 +28,15 @@ export default function Navbar({ currentPath = '/', showSearch = false }: Navbar
 
   // Close menu on route change
   useEffect(() => { setIsMenuOpen(false); }, [currentPath]);
+
+  const navLinks = [
+    { name: lang === 'id' ? 'Beranda' : 'Home', path: '/', icon: '🏠' },
+    { name: lang === 'id' ? 'Kategori' : 'Categories', path: '/#tools-grid', icon: '📂' },
+    { name: 'GitHub', path: 'https://github.com/MAliffadlan/mini_labs', icon: '🐙' }
+  ];
+
+  const tSearchDesktop = lang === 'id' ? 'Cari...' : 'Search...';
+  const tSearchMobile = lang === 'id' ? 'Cari semua tool...' : 'Search all tools...';
 
   return (
     <div
@@ -111,7 +117,7 @@ export default function Navbar({ currentPath = '/', showSearch = false }: Navbar
             onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <span style={{ fontSize: '0.8125rem', fontFamily: "'Inter', sans-serif" }}>Search...</span>
+            <span style={{ fontSize: '0.8125rem', fontFamily: "'Inter', sans-serif" }}>{tSearchDesktop}</span>
             <kbd style={{ fontSize: '0.6875rem', fontFamily: "'Inter', sans-serif", fontWeight: 600, color: 'var(--text-muted)', background: 'rgba(255,255,255,0.05)', padding: '0.125rem 0.375rem', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.1)', marginLeft: '0.25rem' }}>⌘K</kbd>
           </motion.button>
         )}
@@ -248,7 +254,7 @@ export default function Navbar({ currentPath = '/', showSearch = false }: Navbar
                   }}
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                  Search all tools...
+                  {tSearchMobile}
                   <kbd style={{ marginLeft: 'auto', fontSize: '0.6875rem', fontWeight: 600, color: 'var(--text-muted)', background: 'rgba(255,255,255,0.05)', padding: '0.125rem 0.5rem', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.08)' }}>⌘K</kbd>
                 </button>
               </div>

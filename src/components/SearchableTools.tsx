@@ -1,19 +1,19 @@
-/**
- * SearchableTools.tsx — Real-time animated Tabs UI Filter
- * Reads search query from shared nanostores atom.
- */
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@nanostores/react';
 import { $searchQuery } from '../stores/searchStore';
+import { $lang } from '../stores/langStore';
 import ToolCard from './ToolCard';
 
 interface Tool {
   title: string;
+  titleId?: string;
   description: string;
+  descriptionId?: string;
   icon: string;
   href: string;
   category: string;
+  categoryId?: string;
   popular?: boolean;
   color: string;
   glowColor?: string;
@@ -25,28 +25,44 @@ interface SearchableToolsProps {
 
 export default function SearchableTools({ tools }: SearchableToolsProps) {
   const query = useStore($searchQuery);
+  const lang = useStore($lang);
   const [activeTab, setActiveTab] = useState('All');
 
   const tabs = ['All', 'Popular', 'Text', 'Dev', 'Utility'];
+  const tabNames: Record<string, { en: string; id: string }> = {
+    'All': { en: 'All', id: 'Semua' },
+    'Popular': { en: 'Popular', id: 'Populer' },
+    'Text': { en: 'Text', id: 'Teks' },
+    'Dev': { en: 'Dev', id: 'Dev' },
+    'Utility': { en: 'Utility', id: 'Utilitas' }
+  };
 
-  // Filter tools by search query in real-time
+  // Filter tools by search query (Search across both languages)
   const searchFilteredTools = useMemo(() => {
     if (!query.trim()) return tools;
     const lowerQuery = query.toLowerCase();
     
     return tools.filter(tool => 
       tool.title.toLowerCase().includes(lowerQuery) || 
+      (tool.titleId && tool.titleId.toLowerCase().includes(lowerQuery)) ||
       tool.description.toLowerCase().includes(lowerQuery) ||
-      tool.category.toLowerCase().includes(lowerQuery)
+      (tool.descriptionId && tool.descriptionId.toLowerCase().includes(lowerQuery)) ||
+      tool.category.toLowerCase().includes(lowerQuery) ||
+      (tool.categoryId && tool.categoryId.toLowerCase().includes(lowerQuery))
     );
   }, [tools, query]);
 
-  // Then segment based on the active tab
+  // Segment based on active tab
   const displayTools = useMemo(() => {
     if (activeTab === 'All') return searchFilteredTools;
     if (activeTab === 'Popular') return searchFilteredTools.filter(t => t.popular);
     return searchFilteredTools.filter(t => t.category === activeTab);
   }, [searchFilteredTools, activeTab]);
+
+  const tPopularTools = lang === 'id' ? 'Tool Populer' : 'Popular Tools';
+  const tOtherTools = lang === 'id' ? 'Semua Tool Beranda' : 'All Other Tools';
+  const tNoTools = lang === 'id' ? 'Tidak ada tool ditemukan' : 'No tools found';
+  const tNoToolsDesc = lang === 'id' ? `Kami tidak bisa menemukan "${query}" di kategori ini.` : `We couldn't find anything matching "${query}" in this category.`;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
@@ -57,17 +73,10 @@ export default function SearchableTools({ tools }: SearchableToolsProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: 'easeOut', delay: 0.2 }}
         style={{ 
-          display: 'flex', 
-          gap: '0.5rem', 
-          padding: '0.375rem', 
-          backgroundColor: 'rgba(255,255,255,0.02)', 
-          borderRadius: '9999px',
-          border: '1px solid var(--border)',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-          overflowX: 'auto',
-          maxWidth: '100%',
-          scrollbarWidth: 'none',
-          margin: '0 auto',
+          display: 'flex', gap: '0.5rem', padding: '0.375rem', 
+          backgroundColor: 'rgba(255,255,255,0.02)', borderRadius: '9999px',
+          border: '1px solid var(--border)', boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+          overflowX: 'auto', maxWidth: '100%', scrollbarWidth: 'none', margin: '0 auto',
         }}
       >
         {tabs.map(tab => (
@@ -75,19 +84,11 @@ export default function SearchableTools({ tools }: SearchableToolsProps) {
             key={tab}
             onClick={() => setActiveTab(tab)}
             style={{
-              position: 'relative',
-              padding: '0.625rem 1.5rem',
-              borderRadius: '9999px',
-              border: 'none',
-              backgroundColor: 'transparent',
+              position: 'relative', padding: '0.625rem 1.5rem', borderRadius: '9999px',
+              border: 'none', backgroundColor: 'transparent',
               color: activeTab === tab ? 'var(--text-primary)' : 'var(--text-secondary)',
-              fontSize: '0.9375rem',
-              fontFamily: "'Inter', sans-serif",
-              fontWeight: activeTab === tab ? 600 : 500,
-              cursor: 'pointer',
-              transition: 'color 0.2s ease',
-              outline: 'none',
-              whiteSpace: 'nowrap'
+              fontSize: '0.9375rem', fontFamily: "'Inter', sans-serif", fontWeight: activeTab === tab ? 600 : 500,
+              cursor: 'pointer', transition: 'color 0.2s ease', outline: 'none', whiteSpace: 'nowrap'
             }}
             onMouseEnter={(e) => { if (activeTab !== tab) e.currentTarget.style.color = 'var(--text-primary)'; }}
             onMouseLeave={(e) => { if (activeTab !== tab) e.currentTarget.style.color = 'var(--text-secondary)'; }}
@@ -96,13 +97,9 @@ export default function SearchableTools({ tools }: SearchableToolsProps) {
               <motion.div
                 layoutId="activeTabPill"
                 style={{
-                  position: 'absolute',
-                  inset: 0,
-                  backgroundColor: 'rgba(255,255,255,0.08)',
-                  borderRadius: '9999px',
-                  boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-                  border: '1px solid rgba(255,255,255,0.05)',
-                  zIndex: -1
+                  position: 'absolute', inset: 0, backgroundColor: 'rgba(255,255,255,0.08)',
+                  borderRadius: '9999px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                  border: '1px solid rgba(255,255,255,0.05)', zIndex: -1
                 }}
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
               />
@@ -112,7 +109,7 @@ export default function SearchableTools({ tools }: SearchableToolsProps) {
             {tab === 'Dev' && '👨‍💻 '}
             {tab === 'Utility' && '🛠️ '}
             {tab === 'All' && '🧩 '}
-            {tab}
+            {lang === 'id' ? tabNames[tab].id : tabNames[tab].en}
           </button>
         ))}
       </motion.div>
@@ -122,19 +119,14 @@ export default function SearchableTools({ tools }: SearchableToolsProps) {
         <AnimatePresence mode='popLayout'>
           {displayTools.length > 0 ? (
             <>
-              {/* If "All" is active, show the distinct "Popular Tools" section first */}
               {activeTab === 'All' && (
                 <motion.section 
-                  key="popular-section"
-                  layout
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.4 }}
+                  key="popular-section" layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.4 }}
                 >
                   <motion.div layout style={{ marginBottom: '2rem' }}>
                     <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <span style={{ textShadow: '0 0 10px rgba(234, 179, 8, 0.4)' }}>⭐</span> Popular Tools
+                      <span style={{ textShadow: '0 0 10px rgba(234, 179, 8, 0.4)' }}>⭐</span> {tPopularTools}
                     </h2>
                   </motion.div>
                   
@@ -142,7 +134,11 @@ export default function SearchableTools({ tools }: SearchableToolsProps) {
                     <AnimatePresence mode='popLayout'>
                       {displayTools.filter(t => t.popular).map((tool) => (
                         <motion.div key={tool.title} layout initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.3, type: "spring", stiffness: 350, damping: 25 }} style={{ position: 'relative' }}>
-                          <ToolCard title={tool.title} description={tool.description} icon={tool.icon} href={tool.href} color={tool.color} glowColor={tool.glowColor} />
+                          <ToolCard 
+                            title={lang === 'id' ? tool.titleId || tool.title : tool.title} 
+                            description={lang === 'id' ? tool.descriptionId || tool.description : tool.description} 
+                            icon={tool.icon} href={tool.href} color={tool.color} glowColor={tool.glowColor} 
+                          />
                         </motion.div>
                       ))}
                     </AnimatePresence>
@@ -150,18 +146,13 @@ export default function SearchableTools({ tools }: SearchableToolsProps) {
                 </motion.section>
               )}
 
-              {/* Standard grid */}
               <motion.section 
-                key="other-section"
-                layout
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.4 }}
+                key="other-section" layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.4 }}
               >
                 {activeTab === 'All' && (
                   <motion.div layout style={{ marginBottom: '2rem', marginTop: '1rem', borderTop: '1px solid var(--border)', paddingTop: '3rem' }}>
-                    <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>🗂️ All Other Tools</h2>
+                    <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>🗂️ {tOtherTools}</h2>
                   </motion.div>
                 )}
                 
@@ -169,7 +160,11 @@ export default function SearchableTools({ tools }: SearchableToolsProps) {
                   <AnimatePresence mode='popLayout'>
                     {(activeTab === 'All' ? displayTools.filter(t => !t.popular) : displayTools).map((tool) => (
                       <motion.div key={tool.title} layout initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.3, type: "spring", stiffness: 350, damping: 25 }} style={{ position: 'relative' }}>
-                        <ToolCard title={tool.title} description={tool.description} icon={tool.icon} href={tool.href} color={tool.color} glowColor={tool.glowColor} />
+                        <ToolCard 
+                          title={lang === 'id' ? tool.titleId || tool.title : tool.title} 
+                          description={lang === 'id' ? tool.descriptionId || tool.description : tool.description} 
+                          icon={tool.icon} href={tool.href} color={tool.color} glowColor={tool.glowColor} 
+                        />
                       </motion.div>
                     ))}
                   </AnimatePresence>
@@ -178,15 +173,12 @@ export default function SearchableTools({ tools }: SearchableToolsProps) {
             </>
           ) : (
             <motion.div 
-              key="no-results"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
+              key="no-results" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
               style={{ textAlign: 'center', padding: '6rem 0', color: 'var(--text-muted)' }}
             >
               <span style={{ fontSize: '4rem', display: 'block', marginBottom: '1.5rem', filter: 'grayscale(0.5)' }}>📭</span>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.75rem' }}>No tools found</h3>
-              <p style={{ fontSize: '1.125rem' }}>We couldn't find anything matching "{query}" in this category.</p>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.75rem' }}>{tNoTools}</h3>
+              <p style={{ fontSize: '1.125rem' }}>{tNoToolsDesc}</p>
             </motion.div>
           )}
         </AnimatePresence>

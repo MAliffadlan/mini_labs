@@ -5,12 +5,14 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@nanostores/react';
 import { $isCommandPaletteOpen, $searchQuery } from '../stores/searchStore';
+import { $lang } from '../stores/langStore';
 import { allTools } from '../data/tools';
 import { playPop } from '../utils/sounds';
 
 export default function CommandPalette() {
   const isOpen = useStore($isCommandPaletteOpen);
   const query = useStore($searchQuery);
+  const lang = useStore($lang);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -48,8 +50,11 @@ export default function CommandPalette() {
     const q = query.toLowerCase();
     return allTools.filter(t => 
       t.title.toLowerCase().includes(q) || 
+      (t.titleId && t.titleId.toLowerCase().includes(q)) ||
       t.description.toLowerCase().includes(q) ||
-      (t.category && t.category.toLowerCase().includes(q))
+      (t.descriptionId && t.descriptionId.toLowerCase().includes(q)) ||
+      (t.category && t.category.toLowerCase().includes(q)) ||
+      (t.categoryId && t.categoryId.toLowerCase().includes(q))
     );
   }, [query]);
 
@@ -75,11 +80,15 @@ export default function CommandPalette() {
     return () => window.removeEventListener('keydown', handleNav);
   }, [isOpen, filteredTools, selectedIndex]);
 
+  const tPlaceholder = lang === 'id' ? 'Apa yang bos mau akses hari ini?' : 'What do you want to build?';
+  const tNoResults = lang === 'id' ? `Tidak ada tool "${query}" ditemukan 😢` : `No tools found for "${query}" 😢`;
+  const tNavigate = lang === 'id' ? 'pilih' : 'to navigate';
+  const tSelect = lang === 'id' ? 'buka' : 'to select';
+
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -97,7 +106,6 @@ export default function CommandPalette() {
             }}
           />
 
-          {/* Modal Container */}
           <div style={{
             position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
             display: 'flex', justifyContent: 'center', paddingTop: '10vh',
@@ -121,7 +129,6 @@ export default function CommandPalette() {
               }}
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Search Input Area */}
               <div style={{ display: 'flex', alignItems: 'center', padding: '1rem 1.25rem', borderBottom: '1px solid var(--border)' }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
                   <circle cx="11" cy="11" r="8"></circle>
@@ -130,11 +137,11 @@ export default function CommandPalette() {
                 <input
                   ref={inputRef}
                   type="text"
-                  placeholder="What do you want to build?"
+                  placeholder={tPlaceholder}
                   value={query}
                   onChange={(e) => {
                     $searchQuery.set(e.target.value);
-                    setSelectedIndex(0); // Reset selection on new search
+                    setSelectedIndex(0); 
                   }}
                   style={{
                     flex: 1, background: 'transparent', border: 'none', outline: 'none',
@@ -145,16 +152,18 @@ export default function CommandPalette() {
                 <kbd style={{ fontSize: '0.75rem', fontFamily: "'Inter', sans-serif", fontWeight: 600, color: 'var(--text-muted)', background: 'rgba(255,255,255,0.05)', padding: '0.25rem 0.5rem', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)' }}>ESC</kbd>
               </div>
 
-              {/* Results Area */}
               <div style={{ overflowY: 'auto', padding: '0.5rem', flex: 1, scrollBehavior: 'smooth' }}>
                 {filteredTools.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                     No tools found for "{query}" 😢
+                     {tNoResults}
                   </div>
                 ) : (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                     {filteredTools.map((tool, idx) => {
                       const isSelected = idx === selectedIndex;
+                      const title = lang === 'id' && tool.titleId ? tool.titleId : tool.title;
+                      const desc = lang === 'id' && tool.descriptionId ? tool.descriptionId : tool.description;
+                      
                       return (
                         <a
                           key={tool.href}
@@ -183,10 +192,10 @@ export default function CommandPalette() {
                           </div>
                           <div style={{ flex: 1, overflow: 'hidden' }}>
                             <div style={{ color: isSelected ? 'var(--text-primary)' : 'var(--text-secondary)', fontSize: '0.9375rem', fontWeight: 600, marginBottom: '0.125rem' }}>
-                              {tool.title}
+                              {title}
                             </div>
                             <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                              {tool.description}
+                              {desc}
                             </div>
                           </div>
                           {isSelected && (
@@ -201,16 +210,15 @@ export default function CommandPalette() {
                 )}
               </div>
               
-              {/* Footer Hint */}
               <div style={{ padding: '0.75rem 1.25rem', borderTop: '1px solid var(--border)', background: 'var(--bg-tertiary)', display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                   <kbd style={{ background: 'rgba(255,255,255,0.05)', padding: '0.125rem 0.375rem', borderRadius: '4px' }}>↑</kbd>
                   <kbd style={{ background: 'rgba(255,255,255,0.05)', padding: '0.125rem 0.375rem', borderRadius: '4px' }}>↓</kbd>
-                  to navigate
+                  {tNavigate}
                 </span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                   <kbd style={{ background: 'rgba(255,255,255,0.05)', padding: '0.125rem 0.375rem', borderRadius: '4px' }}>↵</kbd>
-                  to select
+                  {tSelect}
                 </span>
               </div>
             </motion.div>

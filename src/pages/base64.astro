@@ -16,10 +16,7 @@ const suggestions = [
   <Navbar client:load currentPath="/base64" />
   <main style="max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem;">
     <ToolPageShell client:load toolTitle="Base64 Encoder" toolIcon="⇋" toolHref="/base64" toolColor="#8b5cf6" suggestions={suggestions}>
-      <div style="margin-bottom: 2.5rem;">
-        <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em;">Base64 Encoder/Decoder</h1>
-        <p style="font-size: 1.0625rem; color: var(--text-secondary); max-width: 600px; line-height: 1.6;">Encode text to Base64 or decode Base64 strings back to plain text.</p>
-      </div>
+      
       <Base64ToolApp client:only="react" />
     </ToolPageShell>
   </main>

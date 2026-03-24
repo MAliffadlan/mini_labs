@@ -15,10 +15,7 @@ const suggestions = [
   <Navbar client:load currentPath="/qr-generator" />
   <main style="max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem;">
     <ToolPageShell client:load toolTitle="QR Code Generator" toolIcon="📱" toolHref="/qr-generator" toolColor="#3b82f6" suggestions={suggestions}>
-      <div style="margin-bottom: 2.5rem; text-align: center;">
-        <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em;">QR Code Generator</h1>
-        <p style="font-size: 1.0625rem; color: var(--text-secondary); max-width: 500px; margin: 0 auto; line-height: 1.6;">Generate and download QR codes from any URL or text.</p>
-      </div>
+      
       <QrGeneratorApp client:visible />
     </ToolPageShell>
   </main>

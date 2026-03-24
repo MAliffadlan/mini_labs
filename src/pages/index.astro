@@ -4,6 +4,8 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.tsx';
 import SearchableTools from '../components/SearchableTools.tsx';
 import ToastContainer from '../components/Toast.tsx';
+import HomepageHero from '../components/HomepageHero.tsx';
+import HomepageFooter from '../components/HomepageFooter.tsx';
 
 import { allTools } from '../data/tools';
 ---
@@ -31,46 +33,12 @@ import { allTools } from '../data/tools';
   </div>
 
   <main style="max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; position: relative;">
-    {/* Premium Hero Section */}
-    <div style="text-align: center; margin-bottom: 5rem; padding-top: 4rem;">
-      <div class="hero-badge">
-        <span>✨</span> 32 Free Tools — Zero Sign-up
-      </div>
-      <h1 style="font-size: 4rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 1rem; line-height: 1.1;">
-        Supercharge your <br />
-        <span class="text-gradient">Workflow</span>
-      </h1>
-      <p style="font-size: 1.25rem; font-weight: 400; color: var(--text-secondary); max-width: 540px; margin: 0 auto;">
-        An all-in-one suite of instantly accessible tools. No sign-up, no tracking — just extreme speed.
-      </p>
-      
-      {/* Kbd shortcut hint */}
-      <div style="margin-top: 2rem; display: flex; justify-content: center; align-items: center; gap: 0.5rem;">
-        <span style="font-size: 0.8125rem; color: var(--text-muted);">Press</span>
-        <kbd style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.625rem; border-radius: 6px; font-size: 0.75rem; font-family: 'Inter', sans-serif; font-weight: 600; color: var(--text-secondary); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">⌘K</kbd>
-        <span style="font-size: 0.8125rem; color: var(--text-muted);">to search</span>
-      </div>
-      
-      <div style="margin-top: 2rem; animation: bounce 2s infinite;">
-        <span style="font-size: 1.5rem; color: var(--text-muted);">↓</span>
-      </div>
-    </div>
+    
+    <HomepageHero client:load />
 
     <SearchableTools client:load tools={allTools} />
 
-    {/* Improved Footer */}
-    <footer style="text-align: center; margin-top: 8rem; padding: 3rem 0; border-top: 1px solid var(--border);">
-      <div style="display: flex; justify-content: center; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
-        <a href="https://github.com/MAliffadlan/mini_labs" target="_blank" rel="noopener noreferrer" style="color: var(--text-muted); text-decoration: none; font-size: 0.875rem; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--text-muted)'">GitHub ↗</a>
-        <span style="color: var(--border);">•</span>
-        <span style="font-size: 0.875rem; color: var(--text-muted);">{allTools.length} Tools Available</span>
-        <span style="color: var(--border);">•</span>
-        <span style="font-size: 0.875rem; color: var(--text-muted);">100% Free & Open Source</span>
-      </div>
-      <p style="font-size: 0.8125rem; color: var(--text-muted);">
-        Built with Astro + React · Crafted by <a href="https://github.com/MAliffadlan" target="_blank" style="color: var(--accent-purple); text-decoration: none;">Alif Fadlan</a>
-      </p>
-    </footer>
+    <HomepageFooter client:load />
 
     <ToastContainer client:load />
   </main>

@@ -8,14 +8,7 @@ import PaletteGeneratorApp from '../apps/color/PaletteGenerator.tsx';
   <Navbar client:load currentPath="/palette-generator" />
   
   <main style="max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem;">
-    <div style="margin-bottom: 2.5rem; display: flex; flex-direction: column; align-items: center; text-align: center;">
-      <h1 style="font-family: 'Outfit', sans-serif; font-size: 3rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em; text-shadow: 0 4px 20px rgba(0,0,0,0.5);">
-        Color Palette Generator
-      </h1>
-      <p style="font-size: 1.125rem; color: var(--text-secondary); max-width: 600px; line-height: 1.6;">
-        Generate aesthetically pleasing, harmonious color palettes with a single click.
-      </p>
-    </div>
+    
 
     <PaletteGeneratorApp client:visible />
   </main>
