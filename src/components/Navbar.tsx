@@ -40,12 +40,17 @@ export default function Navbar({ currentPath = '/', showSearch = false, tools = 
     }
   }, [isSearchOpen]);
 
-  // Close search on Escape
+  // Close search on Escape, open on Cmd+K / Ctrl+K
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isSearchOpen) {
         setIsSearchOpen(false);
         $searchQuery.set('');
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsSearchOpen(prev => !prev);
+        if (isSearchOpen) $searchQuery.set('');
       }
     };
     window.addEventListener('keydown', handleKeyDown);
