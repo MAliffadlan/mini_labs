@@ -30,10 +30,13 @@ export default function ExportImageButton({ getText, filename = 'mini-labs-expor
       // Dynamically import html-to-image
       const { toPng } = await import('html-to-image');
 
-      // Create a temporary "code card" element
+      // Create a hidden wrapper so the element is in DOM but invisible to user
+      const wrapper = document.createElement('div');
+      wrapper.style.cssText = 'position: absolute; top: 0; left: 0; width: 0; height: 0; overflow: hidden; z-index: -1; pointer-events: none;';
+
+      // Create a "code card" element
       const card = document.createElement('div');
       card.style.cssText = `
-        position: fixed; left: -9999px; top: -9999px;
         width: 720px; padding: 0;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border-radius: 16px;
@@ -81,10 +84,19 @@ export default function ExportImageButton({ getText, filename = 'mini-labs-expor
       `;
       card.appendChild(watermark);
 
-      document.body.appendChild(card);
+      wrapper.appendChild(card);
+      document.body.appendChild(wrapper);
 
-      const dataUrl = await toPng(card, { pixelRatio: 2, quality: 1 });
-      document.body.removeChild(card);
+      // Wait for browser to lay out the element and load any pending CSS/fonts
+      await new Promise(r => setTimeout(r, 150));
+
+      // html-to-image often returns a blank/buggy canvas on the first pass for dynamic nodes
+      // due to how SVGs encode CSS. Running it twice is a reliable workaround.
+      await toPng(card, { pixelRatio: 2, cacheBust: true });
+      await new Promise(r => setTimeout(r, 50));
+      const dataUrl = await toPng(card, { pixelRatio: 2, cacheBust: true });
+      
+      document.body.removeChild(wrapper);
 
       // Download
       const link = document.createElement('a');
