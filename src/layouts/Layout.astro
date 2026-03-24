@@ -2,6 +2,7 @@
 // Layout.astro — Base layout with PWA, View Transitions, Settings
 import { ClientRouter } from 'astro:transitions';
 import SettingsModal from '../components/SettingsModal.tsx';
+import CommandPalette from '../components/CommandPalette.tsx';
 
 interface Props {
   title: string;
@@ -34,6 +35,7 @@ const { title, description = 'A collection of modern, all-in-one tools for every
   <body>
     <slot />
     <SettingsModal client:load />
+    <CommandPalette client:load />
     <script>
       // Register Service Worker on page load
       if ('serviceWorker' in navigator) {
