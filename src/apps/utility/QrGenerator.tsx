@@ -8,7 +8,7 @@ import { useAutoSave } from '../../hooks/useAutoSave';
 export default function QrGenerator() {
   const [text, setText] = useAutoSave('qr-gen-input', 'https://mini-labs-snowy.vercel.app');
   const [qrDataUrl, setQrDataUrl] = useState('');
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  
 
   useEffect(() => {
     if (!text.trim()) { setQrDataUrl(''); return; }

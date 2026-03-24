@@ -60,7 +60,7 @@ export default function HexRgbConverter() {
     }
   }, [rInput, gInput, bInput]);
 
-  const getInputStyle = (colorFocusStr: string) => ({
+  const getInputStyle = (colorFocusStr?: string) => ({
     width: '100%', padding: '1rem', borderRadius: '12px', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)', color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace", fontSize: '1.25rem', outline: 'none', transition: 'all 0.2s', textAlign: 'center' as const
   });
 

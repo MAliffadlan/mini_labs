@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import SplitView from '../../components/SplitView';
 import { useAutoSave } from '../../hooks/useAutoSave';
-import { motion } from 'framer-motion';
+
 
 export default function WordCounter() {
   const [text, setText] = useAutoSave('word-counter-input', '');

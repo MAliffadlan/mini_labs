@@ -1,3 +1,4 @@
+import { playPop } from "../utils/sounds";
 /**
  * CopyButton.tsx — Copies text to clipboard with toast notification
  */

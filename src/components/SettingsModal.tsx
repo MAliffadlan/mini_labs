@@ -1,3 +1,4 @@
+import { playPop, playTick } from "../utils/sounds";
 /**
  * SettingsModal.tsx — Theme toggle (Light/Dark/System) + Language + data management
  */
@@ -90,7 +91,7 @@ export default function SettingsModal() {
                 <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{lang === 'id' ? 'Tampilan' : 'Appearance'}</label>
                 <div style={{ display: 'flex', gap: '0.75rem' }}>
                   {themes.map(t => (
-                    <button key={t.value} onClick={() => { import('../utils/sounds').then(m => m.playTick()); setTheme(t.value); }}
+                    <button key={t.value} onClick={() => { playTick(); setTheme(t.value); }}
                       style={{
                         flex: 1, padding: '0.875rem', borderRadius: '14px',
                         border: '1px solid', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.375rem',
@@ -112,7 +113,7 @@ export default function SettingsModal() {
                 <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{lang === 'id' ? 'Bahasa' : 'Language'}</label>
                 <div style={{ display: 'flex', gap: '0.75rem' }}>
                   {languages.map(l => (
-                    <button key={l.value} onClick={() => { import('../utils/sounds').then(m => m.playTick()); setLang(l.value); showToast(l.value === 'id' ? 'Bahasa diubah ke Indonesia' : 'Language changed to English', l.flag); }}
+                    <button key={l.value} onClick={() => { playTick(); setLang(l.value); showToast(l.value === 'id' ? 'Bahasa diubah ke Indonesia' : 'Language changed to English', l.flag); }}
                       style={{
                         flex: 1, padding: '0.875rem', borderRadius: '14px',
                         border: '1px solid', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.375rem',

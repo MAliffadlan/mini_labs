@@ -1,7 +1,7 @@
 /**
  * Toast.tsx — Global toast notification system
  */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@nanostores/react';
 import { $toasts, dismissToast } from '../stores/toastStore';

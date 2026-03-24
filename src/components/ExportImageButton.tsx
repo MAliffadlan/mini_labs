@@ -2,7 +2,7 @@
  * ExportImageButton.tsx — Render an element to a downloadable PNG image
  * Creates a beautiful "code card" look similar to carbon.now.sh
  */
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { showToast } from '../stores/toastStore';
 import { playPop } from '../utils/sounds';

@@ -1,7 +1,7 @@
 /**
  * useDragDrop.ts — Hook for making components file droppable
  */
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { showToast } from '../stores/toastStore';
 
 interface UseDragDropOptions {

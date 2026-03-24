@@ -6,8 +6,8 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ToastContainer from './Toast';
 import { trackTool } from '../stores/recentStore';
-import { showToast } from '../stores/toastStore';
-import { playPop } from '../utils/sounds';
+
+
 
 interface SuggestedTool {
   title: string;
