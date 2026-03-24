@@ -45,4 +45,6 @@ export const allTools: ToolDef[] = [
   { title: 'Timezone Converter', description: 'Convert dates and times across different global timezones.', icon: '🌍', href: '/timezone', category: 'Utility', popular: false, color: '#06b6d4', glowColor: 'rgba(6, 182, 212, 0.4)' },
   { title: 'Palette Generator', description: 'Generate aesthetically pleasing color palettes with a single click.', icon: '✨', href: '/palette-generator', category: 'Utility', popular: false, color: '#f43f5e', glowColor: 'rgba(244, 63, 94, 0.4)' },
   { title: 'HEX ↔ RGB Converter', description: 'Convert Hexadecimal colors to RGB values, or vice versa.', icon: '#', href: '/hex-rgb', category: 'Utility', popular: false, color: '#f59e0b', glowColor: 'rgba(245, 158, 11, 0.4)' },
+  { title: 'EXIF / GPS Reader', description: 'Reveal hidden photo metadata, GPS location, and strip EXIF for privacy.', icon: '🕵️', href: '/exif-reader', category: 'Utility', popular: false, color: '#ef4444', glowColor: 'rgba(239, 68, 68, 0.4)' },
+  { title: 'Spin the Wheel', description: 'Add names and spin a colorful wheel to pick a random winner!', icon: '🎡', href: '/spin-wheel', category: 'Utility', popular: false, color: '#8b5cf6', glowColor: 'rgba(139, 92, 246, 0.4)' },
 ];

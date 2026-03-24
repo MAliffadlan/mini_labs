@@ -1,0 +1,42 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
+import ToolPageShell from '../components/ToolPageShell.tsx';
+import ExifReaderApp from '../apps/utility/ExifReader.tsx';
+
+const pageTitle = "EXIF / GPS Reader";
+const pageDescription = "Upload a photo to reveal hidden metadata, GPS location, and camera info. Strip EXIF data to protect your privacy.";
+const icon = "🕵️";
+const color = "#ef4444";
+
+const suggestions = [
+  { title: 'Hash Generator', icon: '🔒', href: '/hash', color: '#14b8a6' },
+  { title: 'Password Generator', icon: '🔐', href: '/password-generator', color: '#f43f5e' },
+  { title: 'QR Code Generator', icon: '📱', href: '/qr-generator', color: '#3b82f6' }
+];
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <Navbar client:load currentPath="/exif-reader" />
+  <main style="max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem;">
+    <ToolPageShell
+      client:load
+      toolTitle={pageTitle}
+      toolIcon={icon}
+      toolHref="/exif-reader"
+      toolColor={color}
+      suggestions={suggestions}
+    >
+      <div style="margin-bottom: 2rem;">
+        <h1 style="font-size: 2.5rem; font-family: 'Outfit', sans-serif; font-weight: 700; color: #fff; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem;">
+          <span style={`color: ${color}`}>{icon}</span> {pageTitle}
+        </h1>
+        <p style="color: var(--text-secondary); font-size: 1.125rem; max-width: 600px;">
+          {pageDescription}
+        </p>
+      </div>
+
+      <ExifReaderApp client:only="react" />
+    </ToolPageShell>
+  </main>
+</Layout>

@@ -1,0 +1,42 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
+import ToolPageShell from '../components/ToolPageShell.tsx';
+import SpinWheelApp from '../apps/utility/SpinWheel.tsx';
+
+const pageTitle = "Spin the Wheel";
+const pageDescription = "Add names, spin the colorful wheel, and let fate decide the winner! Perfect for giveaways, decisions, and fun.";
+const icon = "🎡";
+const color = "#8b5cf6";
+
+const suggestions = [
+  { title: 'Password Generator', icon: '🔐', href: '/password-generator', color: '#f43f5e' },
+  { title: 'UUID Generator', icon: '🆔', href: '/uuid', color: '#8b5cf6' },
+  { title: 'Countdown Timer', icon: '⏳', href: '/countdown', color: '#eab308' }
+];
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <Navbar client:load currentPath="/spin-wheel" />
+  <main style="max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem;">
+    <ToolPageShell
+      client:load
+      toolTitle={pageTitle}
+      toolIcon={icon}
+      toolHref="/spin-wheel"
+      toolColor={color}
+      suggestions={suggestions}
+    >
+      <div style="margin-bottom: 2rem;">
+        <h1 style="font-size: 2.5rem; font-family: 'Outfit', sans-serif; font-weight: 700; color: #fff; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem;">
+          <span style={`color: ${color}`}>{icon}</span> {pageTitle}
+        </h1>
+        <p style="color: var(--text-secondary); font-size: 1.125rem; max-width: 600px;">
+          {pageDescription}
+        </p>
+      </div>
+
+      <SpinWheelApp client:only="react" />
+    </ToolPageShell>
+  </main>
+</Layout>
