@@ -37,7 +37,7 @@ export const allTools: ToolDef[] = [
   { title: 'Markdown Editor', description: 'Write markdown with real-time HTML preview. Supports drag-and-drop.', icon: 'Ⓜ️', href: '/markdown', category: 'Text', popular: false, color: '#3b82f6', glowColor: 'rgba(59, 130, 246, 0.4)' },
   { title: 'Lorem Ipsum Generator', description: 'Generate placeholder dummy text for your UI mockups.', icon: '📰', href: '/lorem', category: 'Text', popular: false, color: '#14b8a6', glowColor: 'rgba(20, 184, 166, 0.4)' },
   { title: 'Case Converter', description: 'Convert text to UPPERCASE, lowercase, Title Case, camelCase, and more.', icon: 'Aa', href: '/case-converter', category: 'Text', popular: false, color: '#f59e0b', glowColor: 'rgba(245, 158, 11, 0.4)' },
-  { title: 'Zen Scratchpad', description: 'Distraction-free notepad that auto-saves your keystrokes globally.', icon: '📓', href: '/scratchpad', category: 'Text', popular: false, color: '#10b981', glowColor: 'rgba(16, 185, 129, 0.4)' },
+  { title: 'Notepad', description: 'Distraction-free notepad that auto-saves your keystrokes locally.', icon: '📓', href: '/scratchpad', category: 'Text', popular: false, color: '#10b981', glowColor: 'rgba(16, 185, 129, 0.4)' },
   // Utility
   { title: 'Password Generator', description: 'Generate cryptographically secure passwords with custom rules.', icon: '🔐', href: '/password-generator', category: 'Utility', popular: false, color: '#f43f5e', glowColor: 'rgba(244, 63, 94, 0.4)' },
   { title: 'QR Code Generator', description: 'Generate downloadable QR codes from any URL or text.', icon: '📱', href: '/qr-generator', category: 'Utility', popular: false, color: '#3b82f6', glowColor: 'rgba(59, 130, 246, 0.4)' },

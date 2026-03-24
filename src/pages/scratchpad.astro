@@ -1,9 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
 import ToolPageShell from '../components/ToolPageShell.tsx';
-import ZenScratchpadApp from '../apps/text/ZenScratchpad.tsx';
+import NotepadApp from '../apps/text/ZenScratchpad.tsx';
 
-const pageTitle = "Zen Scratchpad";
+const pageTitle = "Notepad";
 const pageDescription = "A distraction-free, auto-saving notepad. Perfect for quick thoughts, drafts, or scripts. Never lose a keystroke again.";
 const icon = "📓";
 const color = "#10b981";
@@ -16,7 +17,8 @@ const suggestions = [
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
-  <main style="padding: 2rem 1rem; max-width: 1000px; margin: 0 auto;">
+  <Navbar client:load currentPath="/scratchpad" />
+  <main style="max-width: 1000px; margin: 0 auto; padding: 2rem 1.5rem;">
     <ToolPageShell
       client:load
       toolTitle={pageTitle}
@@ -34,7 +36,7 @@ const suggestions = [
         </p>
       </div>
 
-      <ZenScratchpadApp client:only="react" />
+      <NotepadApp client:only="react" />
     </ToolPageShell>
   </main>
 </Layout>
