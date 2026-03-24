@@ -1,7 +1,7 @@
 /**
  * JwtDecoder.tsx — Decode JSON Web Tokens
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import CopyButton from '../../components/CopyButton';
 import { useAutoSave } from '../../hooks/useAutoSave';
 import { useDragDrop } from '../../hooks/useDragDrop';
@@ -34,6 +34,17 @@ function formatExp(exp: number): string {
 export default function JwtDecoder() {
   const [token, setToken] = useAutoSave('jwt-decoder-input', sampleJwt);
   const decoded = decodeJwt(token);
+
+  useEffect(() => {
+    import('../../utils/shareLink').then(({ getShareDataFromUrl }) => {
+      const dbUrl = getShareDataFromUrl();
+      if (dbUrl) setToken(dbUrl);
+    });
+  }, []);
+
+  useEffect(() => {
+    import('../../stores/shareStore').then(({ setShareData }) => setShareData(token));
+  }, [token]);
 
   const { isDragging, dragProps } = useDragDrop({ onDrop: setToken });
 

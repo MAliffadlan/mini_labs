@@ -26,7 +26,7 @@ interface ToolPageShellProps {
   toolColor: string;
   suggestions?: SuggestedTool[];
   children: React.ReactNode;
-  getShareData?: () => string;
+  supportShare?: boolean;
 }
 
 function FavoriteButton({ toolHref, toolTitle }: { toolHref: string, toolTitle: string }) {
@@ -57,7 +57,7 @@ function FavoriteButton({ toolHref, toolTitle }: { toolHref: string, toolTitle: 
   );
 }
 
-export default function ToolPageShell({ toolTitle, toolIcon, toolHref, toolColor, suggestions = [], children, getShareData }: ToolPageShellProps) {
+export default function ToolPageShell({ toolTitle, toolIcon, toolHref, toolColor, suggestions = [], children, supportShare }: ToolPageShellProps) {
   // Track this tool on mount
   useEffect(() => {
     trackTool({ title: toolTitle, href: toolHref, icon: toolIcon, color: toolColor });
@@ -79,7 +79,7 @@ export default function ToolPageShell({ toolTitle, toolIcon, toolHref, toolColor
         
         {/* Action Buttons */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          {getShareData && <ShareButton toolPath={toolHref} getData={getShareData} />}
+          {supportShare && <ShareButton toolPath={toolHref} getData={() => { const { $shareData } = require('../stores/shareStore'); return $shareData.get(); }} />}
           <FavoriteButton toolHref={toolHref} toolTitle={toolTitle} />
         </div>
       </div>

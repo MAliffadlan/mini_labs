@@ -2,16 +2,25 @@
 // regex.astro — Regex Tester tool page
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.tsx';
+import ToolPageShell from '../components/ToolPageShell.tsx';
 import RegexTester from '../apps/regex/RegexTester.tsx';
+
+const suggestions = [
+  { title: 'JSON Formatter', icon: '{}', href: '/json', color: '#3b82f6' },
+  { title: 'Text Diff Checker', icon: '📄', href: '/text-diff', color: '#10b981' },
+  { title: 'Hash Generator', icon: '🔒', href: '/hash', color: '#14b8a6' },
+];
 ---
 
-<Layout title="Regex Tester" description="Test regular expressions with real-time match highlighting">
+<Layout title="Regex Tester - Mini Labs">
   <Navbar client:load currentPath="/regex" />
-  <main style="max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem;">
-    <div style="margin-bottom: 1rem;">
-      <h1 style="font-size: 1.375rem; font-weight: 600; letter-spacing: -0.02em;">Regex Tester</h1>
-      <p style="font-size: 0.8125rem; color: var(--text-secondary); margin-top: 0.25rem;">Test regex patterns with live match highlighting</p>
-    </div>
-    <RegexTester client:only="react" />
+  <main style="max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem;">
+    <ToolPageShell client:load toolTitle="Regex Tester" toolIcon=".*" toolHref="/regex" toolColor="#10b981" suggestions={suggestions} supportShare={true}>
+      <div style="margin-bottom: 2.5rem;">
+        <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em;">Regex Tester</h1>
+        <p style="font-size: 1.0625rem; color: var(--text-secondary); max-width: 600px; line-height: 1.6;">Test and debug your Regular Expressions against custom text strings.</p>
+      </div>
+      <RegexTester client:only="react" />
+    </ToolPageShell>
   </main>
 </Layout>

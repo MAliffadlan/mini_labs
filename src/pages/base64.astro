@@ -2,16 +2,25 @@
 // base64.astro — Base64 Encoder/Decoder tool page
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.tsx';
+import ToolPageShell from '../components/ToolPageShell.tsx';
 import Base64Tool from '../apps/base64/Base64Tool.tsx';
+
+const suggestions = [
+  { title: 'URL Encoder/Decoder', icon: '🔗', href: '/url-encoder', color: '#06b6d4' },
+  { title: 'Hash Generator', icon: '🔒', href: '/hash', color: '#14b8a6' },
+  { title: 'JWT Decoder', icon: '🔑', href: '/jwt-decoder', color: '#f59e0b' },
+];
 ---
 
-<Layout title="Base64 Encoder/Decoder" description="Encode and decode Base64 strings">
+<Layout title="Base64 Encoder/Decoder - Mini Labs">
   <Navbar client:load currentPath="/base64" />
-  <main style="max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem;">
-    <div style="margin-bottom: 1rem;">
-      <h1 style="font-size: 1.375rem; font-weight: 600; letter-spacing: -0.02em;">Base64 Encoder/Decoder</h1>
-      <p style="font-size: 0.8125rem; color: var(--text-secondary); margin-top: 0.25rem;">Encode text → Base64 or decode Base64 → text</p>
-    </div>
-    <Base64Tool client:only="react" />
+  <main style="max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem;">
+    <ToolPageShell client:load toolTitle="Base64 Encoder" toolIcon="⇋" toolHref="/base64" toolColor="#8b5cf6" suggestions={suggestions} supportShare={true}>
+      <div style="margin-bottom: 2.5rem;">
+        <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em;">Base64 Encoder/Decoder</h1>
+        <p style="font-size: 1.0625rem; color: var(--text-secondary); max-width: 600px; line-height: 1.6;">Encode text to Base64 or decode Base64 strings back to plain text.</p>
+      </div>
+      <Base64Tool client:only="react" />
+    </ToolPageShell>
   </main>
 </Layout>

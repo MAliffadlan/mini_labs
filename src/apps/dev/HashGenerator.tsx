@@ -22,6 +22,17 @@ export default function HashGenerator() {
   });
 
   useEffect(() => {
+    import('../../utils/shareLink').then(({ getShareDataFromUrl }) => {
+      const dbUrl = getShareDataFromUrl();
+      if (dbUrl) setInput(dbUrl);
+    });
+  }, []);
+
+  useEffect(() => {
+    import('../../stores/shareStore').then(({ setShareData }) => setShareData(input));
+  }, [input]);
+
+  useEffect(() => {
     try {
       setHashes({
         MD5: CryptoJS.MD5(input).toString(CryptoJS.enc.Hex),

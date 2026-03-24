@@ -22,6 +22,26 @@ export default function RegexTester() {
   const [error, setError] = useState('');
   const [matches, setMatches] = useState<MatchInfo[]>([]);
 
+  useEffect(() => {
+    import('../../utils/shareLink').then(({ getShareDataFromUrl }) => {
+      const dbUrl = getShareDataFromUrl();
+      if (dbUrl) {
+        try {
+          const parsed = JSON.parse(dbUrl);
+          if (parsed.p) setPattern(parsed.p);
+          if (parsed.f) setFlags(parsed.f);
+          if (parsed.t) setTestString(parsed.t);
+        } catch {}
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    import('../../stores/shareStore').then(({ setShareData }) => {
+      setShareData(JSON.stringify({ p: pattern, f: flags, t: testString }));
+    });
+  }, [pattern, flags, testString]);
+
   // Build regex and find matches
   const processRegex = useCallback(() => {
     if (!pattern.trim()) {
