@@ -11,15 +11,31 @@ import { allTools } from '../data/tools';
 <Layout title="Mini Labs - All-in-One Online Tools">
   <Navbar client:load currentPath="/" showSearch={true} />
 
+  {/* Floating Particles Background */}
+  <div class="particles-container" aria-hidden="true">
+    <div class="particle p1"></div>
+    <div class="particle p2"></div>
+    <div class="particle p3"></div>
+    <div class="particle p4"></div>
+    <div class="particle p5"></div>
+    <div class="particle p6"></div>
+    <div class="particle p7"></div>
+    <div class="particle p8"></div>
+  </div>
+
   {/* Ambient Background Orbs */}
   <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100vh', overflow: 'hidden', zIndex: -1, pointerEvents: 'none' }}>
     <div style={{ position: 'absolute', top: '-10%', left: '20%', width: '400px', height: '400px', background: 'rgba(59, 130, 246, 0.25)', filter: 'blur(120px)', borderRadius: '50%' }}></div>
     <div style={{ position: 'absolute', top: '10%', right: '20%', width: '300px', height: '300px', background: 'rgba(139, 92, 246, 0.25)', filter: 'blur(120px)', borderRadius: '50%' }}></div>
+    <div style={{ position: 'absolute', top: '30%', left: '50%', width: '250px', height: '250px', background: 'rgba(236, 72, 153, 0.15)', filter: 'blur(100px)', borderRadius: '50%', transform: 'translateX(-50%)' }}></div>
   </div>
 
   <main style="max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; position: relative;">
     {/* Premium Hero Section */}
     <div style="text-align: center; margin-bottom: 5rem; padding-top: 4rem;">
+      <div class="hero-badge">
+        <span>✨</span> 32 Free Tools — Zero Sign-up
+      </div>
       <h1 style="font-size: 4rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 1rem; line-height: 1.1;">
         Supercharge your <br />
         <span class="text-gradient">Workflow</span>
@@ -40,12 +56,11 @@ import { allTools } from '../data/tools';
       </div>
     </div>
 
-
     <SearchableTools client:load tools={allTools} />
 
     {/* Improved Footer */}
     <footer style="text-align: center; margin-top: 8rem; padding: 3rem 0; border-top: 1px solid var(--border);">
-      <div style="display: flex; justify-content: center; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem;">
+      <div style="display: flex; justify-content: center; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
         <a href="https://github.com/MAliffadlan/mini_labs" target="_blank" rel="noopener noreferrer" style="color: var(--text-muted); text-decoration: none; font-size: 0.875rem; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--text-muted)'">GitHub ↗</a>
         <span style="color: var(--border);">•</span>
         <span style="font-size: 0.875rem; color: var(--text-muted);">{allTools.length} Tools Available</span>
@@ -64,6 +79,63 @@ import { allTools } from '../data/tools';
     @keyframes bounce {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(10px); }
+    }
+
+    /* Hero Badge */
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.375rem 1rem;
+      border-radius: 9999px;
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      color: #a78bfa;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 2rem;
+      animation: fadeInDown 0.6s ease-out;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Floating Particles */
+    .particles-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: float linear infinite;
+    }
+
+    .p1 { width: 4px; height: 4px; background: #8b5cf6; top: 15%; left: 10%; animation-duration: 22s; }
+    .p2 { width: 3px; height: 3px; background: #3b82f6; top: 25%; left: 80%; animation-duration: 18s; animation-delay: -3s; }
+    .p3 { width: 5px; height: 5px; background: #ec4899; top: 45%; left: 30%; animation-duration: 25s; animation-delay: -7s; }
+    .p4 { width: 3px; height: 3px; background: #14b8a6; top: 60%; left: 70%; animation-duration: 20s; animation-delay: -5s; }
+    .p5 { width: 4px; height: 4px; background: #f59e0b; top: 75%; left: 15%; animation-duration: 23s; animation-delay: -10s; }
+    .p6 { width: 3px; height: 3px; background: #6366f1; top: 35%; left: 55%; animation-duration: 19s; animation-delay: -2s; }
+    .p7 { width: 5px; height: 5px; background: #8b5cf6; top: 85%; left: 45%; animation-duration: 26s; animation-delay: -8s; }
+    .p8 { width: 4px; height: 4px; background: #3b82f6; top: 10%; left: 90%; animation-duration: 21s; animation-delay: -12s; }
+
+    @keyframes float {
+      0% { transform: translateY(0px) translateX(0px); opacity: 0; }
+      10% { opacity: 0.3; }
+      90% { opacity: 0.3; }
+      100% { transform: translateY(-100vh) translateX(30px); opacity: 0; }
     }
   </style>
 </Layout>

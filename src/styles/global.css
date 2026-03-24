@@ -116,12 +116,26 @@ code, pre, .font-mono {
   border: 1px solid var(--border);
 }
 
-/* Gradient Text utility */
+/* Gradient Text utility — Animated Shimmer */
 .text-gradient {
-  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  background: linear-gradient(
+    90deg,
+    var(--accent-blue),
+    var(--accent-purple),
+    #ec4899,
+    var(--accent-blue)
+  );
+  background-size: 300% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: shimmer 6s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* ===== Responsive Design ===== */

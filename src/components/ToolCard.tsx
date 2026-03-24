@@ -1,8 +1,4 @@
-/**
- * ToolCard.tsx — Ultra-Premium Micro-Interactive Card
- * Inspired by modern design systems (designspells.com, linear, vercel)
- */
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
 
 interface ToolCardProps {
@@ -18,24 +14,39 @@ export default function ToolCard({ title, description, icon, href, color, glowCo
   let mouseX = useMotionValue(0);
   let mouseY = useMotionValue(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
+  const cardRef = useRef<HTMLAnchorElement>(null);
   
   function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
-    let { left, top } = currentTarget.getBoundingClientRect();
+    let { left, top, width, height } = currentTarget.getBoundingClientRect();
     mouseX.set(clientX - left);
     mouseY.set(clientY - top);
+    
+    // 3D Tilt
+    const x = (clientX - left) / width;
+    const y = (clientY - top) / height;
+    setTilt({
+      rotateX: (y - 0.5) * -12,
+      rotateY: (x - 0.5) * 12,
+    });
   }
 
   const baseGlow = glowColor || color;
   
   return (
     <motion.a
+      ref={cardRef}
       href={href}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      // 1. Smooth Scale & Tactile Click Feedback
-      whileHover={{ scale: 1.02, y: -4 }}
+      onMouseLeave={() => { setIsHovered(false); setTilt({ rotateX: 0, rotateY: 0 }); }}
       whileTap={{ scale: 0.97 }}
+      animate={{
+        rotateX: tilt.rotateX,
+        rotateY: tilt.rotateY,
+        scale: isHovered ? 1.02 : 1,
+        y: isHovered ? -4 : 0,
+      }}
       transition={{ type: "spring", stiffness: 400, damping: 25 }}
       style={{
         position: 'relative',
@@ -50,7 +61,9 @@ export default function ToolCard({ title, description, icon, href, color, glowCo
         boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
         cursor: 'pointer',
         height: '100%',
-        willChange: 'transform' // Performance optimization
+        willChange: 'transform',
+        transformStyle: 'preserve-3d',
+        perspective: '800px',
       }}
     >
       {/* 2. Hover Glow: Background radial gradient following mouse */}
