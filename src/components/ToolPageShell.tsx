@@ -4,8 +4,12 @@
  */
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useStore } from '@nanostores/react';
 import ToastContainer from './Toast';
 import { trackTool } from '../stores/recentStore';
+import { $favorites, toggleFavorite, isFavorite } from '../stores/favoriteStore';
+import { showToast } from '../stores/toastStore';
+import { playPop } from '../utils/sounds';
 
 interface SuggestedTool {
   title: string;
@@ -23,6 +27,34 @@ interface ToolPageShellProps {
   children: React.ReactNode;
 }
 
+function FavoriteButton({ toolHref, toolTitle }: { toolHref: string, toolTitle: string }) {
+  const favorites = useStore($favorites);
+  const starred = favorites.includes(toolHref);
+
+  return (
+    <motion.button
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
+      onClick={() => {
+        const isNowStarred = toggleFavorite(toolHref);
+        playPop();
+        showToast(isNowStarred ? `Added to Favorites ⭐` : `Removed from Favorites`, isNowStarred ? '⭐' : '🗑️');
+      }}
+      style={{
+        width: '36px', height: '36px', borderRadius: '50%', border: 'none',
+        backgroundColor: starred ? 'rgba(234, 179, 8, 0.15)' : 'rgba(255,255,255,0.03)',
+        color: starred ? '#eab308' : 'var(--text-muted)',
+        fontSize: '1.125rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        cursor: 'pointer', transition: 'all 0.2s',
+      }}
+      onMouseEnter={e => { if (!starred) e.currentTarget.style.color = '#fff'; e.currentTarget.style.backgroundColor = starred ? 'rgba(234, 179, 8, 0.2)' : 'rgba(255,255,255,0.08)'; }}
+      onMouseLeave={e => { if (!starred) e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.backgroundColor = starred ? 'rgba(234, 179, 8, 0.15)' : 'rgba(255,255,255,0.03)'; }}
+    >
+      {starred ? '⭐' : '☆'}
+    </motion.button>
+  );
+}
+
 export default function ToolPageShell({ toolTitle, toolIcon, toolHref, toolColor, suggestions = [], children }: ToolPageShellProps) {
   // Track this tool on mount
   useEffect(() => {
@@ -31,16 +63,21 @@ export default function ToolPageShell({ toolTitle, toolIcon, toolHref, toolColor
 
   return (
     <>
-      {/* Breadcrumb */}
-      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2rem', fontSize: '0.875rem', fontFamily: "'Inter', sans-serif" }}>
-        <a href="/" style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}
-           onMouseEnter={e => e.currentTarget.style.color = 'var(--text-primary)'}
-           onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
-          Home
-        </a>
-        <span style={{ color: 'var(--text-muted)' }}>›</span>
-        <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{toolTitle}</span>
-      </nav>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+        {/* Breadcrumb */}
+        <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', fontFamily: "'Inter', sans-serif" }}>
+          <a href="/" style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}
+             onMouseEnter={e => e.currentTarget.style.color = 'var(--text-primary)'}
+             onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
+            Home
+          </a>
+          <span style={{ color: 'var(--text-muted)' }}>›</span>
+          <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{toolTitle}</span>
+        </nav>
+        
+        {/* Favorite Button */}
+        <FavoriteButton toolHref={toolHref} toolTitle={toolTitle} />
+      </div>
 
       {/* Tool Content */}
       {children}

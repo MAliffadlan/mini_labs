@@ -13,6 +13,7 @@ export default function CopyButton({ text, label = 'Copy' }: CopyButtonProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = useCallback(async () => {
+    import('../utils/sounds').then(({ playPop }) => playPop());
     try {
       await navigator.clipboard.writeText(text);
     } catch {

@@ -4,6 +4,7 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.tsx';
 import SearchableTools from '../components/SearchableTools.tsx';
 import RecentTools from '../components/RecentTools.tsx';
+import FavoriteTools from '../components/FavoriteTools.tsx';
 import ToastContainer from '../components/Toast.tsx';
 
 const allTools = [
@@ -65,6 +66,9 @@ const allTools = [
       </div>
     </div>
 
+    {/* Favorites */}
+    <FavoriteTools client:load allTools={allTools} />
+
     {/* Recently Used Tools */}
     <RecentTools client:load />
 
@@ -75,7 +79,7 @@ const allTools = [
       <div style="display: flex; justify-content: center; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem;">
         <a href="https://github.com/MAliffadlan/mini_labs" target="_blank" rel="noopener noreferrer" style="color: var(--text-muted); text-decoration: none; font-size: 0.875rem; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--text-muted)'">GitHub ↗</a>
         <span style="color: var(--border);">•</span>
-        <span style="font-size: 0.875rem; color: var(--text-muted);">19 Tools Available</span>
+        <span style="font-size: 0.875rem; color: var(--text-muted);">24 Tools Available</span>
         <span style="color: var(--border);">•</span>
         <span style="font-size: 0.875rem; color: var(--text-muted);">100% Free & Open Source</span>
       </div>

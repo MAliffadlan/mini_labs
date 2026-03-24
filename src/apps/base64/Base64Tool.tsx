@@ -6,6 +6,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import SplitView from '../../components/SplitView';
 import CopyButton from '../../components/CopyButton';
 import { useAutoSave } from '../../hooks/useAutoSave';
+import { useDragDrop } from '../../hooks/useDragDrop';
 
 type Mode = 'encode' | 'decode';
 
@@ -14,6 +15,10 @@ export default function Base64Tool() {
   const [input, setInput] = useAutoSave('base64-input', 'Hello, Mini Labs!');
   const [output, setOutput] = useState('');
   const [error, setError] = useState('');
+
+  const { isDragging, dragProps } = useDragDrop({
+    onDrop: (text) => setInput(text)
+  });
 
   // Process input based on current mode
   const processInput = useCallback(() => {
@@ -116,29 +121,37 @@ export default function Base64Tool() {
         }
         rightActions={<CopyButton text={output} />}
         leftContent={
-          <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder={
-              mode === 'encode'
-                ? 'Enter text to encode...'
-                : 'Enter Base64 string to decode...'
-            }
-            spellCheck={false}
-            style={{
-              width: '100%',
-              height: '100%',
-              padding: '1rem',
-              backgroundColor: 'transparent',
-              color: 'var(--text-primary)',
-              border: 'none',
-              resize: 'none',
-              fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-              fontSize: '0.8125rem',
-              lineHeight: 1.6,
-              outline: 'none',
-            }}
-          />
+          <div {...dragProps} style={{ height: '100%', position: 'relative' }}>
+            {isDragging && (
+              <div style={{ position: 'absolute', inset: 0, zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(9,9,11,0.8)', backdropFilter: 'blur(4px)', color: 'var(--accent-purple)', fontSize: '1.25rem', fontWeight: 600 }}>
+                📥 Drop text file here
+              </div>
+            )}
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder={
+                mode === 'encode'
+                  ? 'Enter text or drop a file to encode...'
+                  : 'Enter Base64 or drop a file to decode...'
+              }
+              spellCheck={false}
+              style={{
+                width: '100%',
+                height: '100%',
+                padding: '1rem',
+                backgroundColor: isDragging ? 'rgba(139, 92, 246, 0.05)' : 'transparent',
+                color: 'var(--text-primary)',
+                border: 'none',
+                resize: 'none',
+                fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                fontSize: '0.8125rem',
+                lineHeight: 1.6,
+                outline: 'none',
+                transition: 'background-color 0.2s',
+              }}
+            />
+          </div>
         }
         rightContent={
           <div style={{ height: '100%' }}>

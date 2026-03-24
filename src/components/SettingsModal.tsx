@@ -82,13 +82,13 @@ export default function SettingsModal() {
                 <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Appearance</label>
                 <div style={{ display: 'flex', gap: '0.75rem' }}>
                   {themes.map(t => (
-                    <button key={t.value} onClick={() => setTheme(t.value)}
+                    <button key={t.value} onClick={() => { import('../utils/sounds').then(m => m.playTick()); setTheme(t.value); }}
                       style={{
                         flex: 1, padding: '0.875rem', borderRadius: '14px',
                         border: '1px solid', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.375rem',
-                        backgroundColor: theme === t.value ? 'rgba(139,92,246,0.12)' : 'rgba(255,255,255,0.02)',
+                        backgroundColor: theme === t.value ? 'rgba(139,92,246,0.12)' : 'var(--bg-card)',
                         borderColor: theme === t.value ? 'rgba(139,92,246,0.35)' : 'var(--border)',
-                        color: theme === t.value ? '#fff' : 'var(--text-secondary)',
+                        color: theme === t.value ? 'var(--text-primary)' : 'var(--text-secondary)',
                         transition: 'all 0.2s',
                       }}
                     >

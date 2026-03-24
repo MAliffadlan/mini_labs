@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
+import ToolPageShell from '../components/ToolPageShell.tsx';
+import HashGenerator from '../apps/dev/HashGenerator.tsx';
+
+const suggestions = [
+  { title: 'Base64 Encoder', icon: '⇋', href: '/base64', color: '#8b5cf6' },
+  { title: 'Url Encoder', icon: '🔗', href: '/url-encoder', color: '#06b6d4' },
+  { title: 'Password Generator', icon: '🔐', href: '/password-generator', color: '#f43f5e' },
+];
+---
+
+<Layout title="Hash Generator - Mini Labs">
+  <Navbar client:load currentPath="/hash" />
+  <main style="max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem;">
+    <ToolPageShell client:load toolTitle="Hash Generator" toolIcon="🔒" toolHref="/hash" toolColor="#14b8a6" suggestions={suggestions}>
+      <div style="margin-bottom: 2.5rem;">
+        <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em;">Hash Generator</h1>
+        <p style="font-size: 1.0625rem; color: var(--text-secondary); max-width: 600px; line-height: 1.6;">Generate MD5, SHA-1, SHA-256, and SHA-512 cryptographic hashes. Supports drag-and-drop.</p>
+      </div>
+      <HashGenerator client:load />
+    </ToolPageShell>
+  </main>
+</Layout>

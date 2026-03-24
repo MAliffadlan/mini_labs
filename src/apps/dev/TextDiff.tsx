@@ -4,6 +4,7 @@
 import React, { useMemo } from 'react';
 import CopyButton from '../../components/CopyButton';
 import { useAutoSave } from '../../hooks/useAutoSave';
+import { useDragDrop } from '../../hooks/useDragDrop';
 
 function computeDiff(a: string, b: string): { left: {text: string; type: string}[]; right: {text: string; type: string}[] } {
   const linesA = a.split('\n');
@@ -41,6 +42,9 @@ const sampleB = `function greet(name, age) {
 export default function TextDiff() {
   const [textA, setTextA] = useAutoSave('text-diff-a', sampleA);
   const [textB, setTextB] = useAutoSave('text-diff-b', sampleB);
+
+  const { isDragging: isDraggingA, dragProps: dragPropsA } = useDragDrop({ onDrop: setTextA });
+  const { isDragging: isDraggingB, dragProps: dragPropsB } = useDragDrop({ onDrop: setTextB });
 
   const diff = useMemo(() => computeDiff(textA, textB), [textA, textB]);
 
@@ -92,24 +96,34 @@ export default function TextDiff() {
 
       {/* Input areas */}
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-        <div style={{ flex: 1, minWidth: '280px' }}>
+        <div {...dragPropsA} style={{ flex: 1, minWidth: '280px', position: 'relative' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
             <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#f43f5e', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Original</span>
             <button onClick={() => setTextA('')} style={{ fontSize: '0.75rem', color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer' }}>Clear</button>
           </div>
-          <textarea value={textA} onChange={e => setTextA(e.target.value)} spellCheck={false}
-            style={{ width: '100%', height: '180px', padding: '1rem', borderRadius: '12px', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)', color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.875rem', lineHeight: 1.6, outline: 'none', resize: 'vertical' }}
+          {isDraggingA && (
+            <div style={{ position: 'absolute', inset: 0, top: '2rem', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(9,9,11,0.8)', backdropFilter: 'blur(4px)', color: '#f43f5e', fontSize: '1.25rem', fontWeight: 600, borderRadius: '12px' }}>
+              📥 Drop text file
+            </div>
+          )}
+          <textarea value={textA} onChange={e => setTextA(e.target.value)} spellCheck={false} placeholder="Paste original text or drop .txt file"
+            style={{ width: '100%', height: '180px', padding: '1rem', borderRadius: '12px', backgroundColor: isDraggingA ? 'rgba(244, 63, 94, 0.05)' : 'rgba(255,255,255,0.02)', border: '1px solid var(--border)', color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.875rem', lineHeight: 1.6, outline: 'none', resize: 'vertical', transition: 'background-color 0.2s' }}
             onFocus={e => e.currentTarget.style.borderColor = '#f43f5e'}
             onBlur={e => e.currentTarget.style.borderColor = 'var(--border)'}
           />
         </div>
-        <div style={{ flex: 1, minWidth: '280px' }}>
+        <div {...dragPropsB} style={{ flex: 1, minWidth: '280px', position: 'relative' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
             <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Modified</span>
             <button onClick={() => setTextB('')} style={{ fontSize: '0.75rem', color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer' }}>Clear</button>
           </div>
-          <textarea value={textB} onChange={e => setTextB(e.target.value)} spellCheck={false}
-            style={{ width: '100%', height: '180px', padding: '1rem', borderRadius: '12px', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)', color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.875rem', lineHeight: 1.6, outline: 'none', resize: 'vertical' }}
+          {isDraggingB && (
+            <div style={{ position: 'absolute', inset: 0, top: '2rem', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(9,9,11,0.8)', backdropFilter: 'blur(4px)', color: '#10b981', fontSize: '1.25rem', fontWeight: 600, borderRadius: '12px' }}>
+              📥 Drop text file
+            </div>
+          )}
+          <textarea value={textB} onChange={e => setTextB(e.target.value)} spellCheck={false} placeholder="Paste modified text or drop .txt file"
+            style={{ width: '100%', height: '180px', padding: '1rem', borderRadius: '12px', backgroundColor: isDraggingB ? 'rgba(16, 185, 129, 0.05)' : 'rgba(255,255,255,0.02)', border: '1px solid var(--border)', color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.875rem', lineHeight: 1.6, outline: 'none', resize: 'vertical', transition: 'background-color 0.2s' }}
             onFocus={e => e.currentTarget.style.borderColor = '#10b981'}
             onBlur={e => e.currentTarget.style.borderColor = 'var(--border)'}
           />

@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
+import ToolPageShell from '../components/ToolPageShell.tsx';
+import LoremIpsum from '../apps/text/LoremIpsum.tsx';
+
+const suggestions = [
+  { title: 'Word Counter', icon: '📝', href: '/word-counter', color: '#10b981' },
+  { title: 'Case Converter', icon: 'Aa', href: '/case-converter', color: '#f59e0b' },
+  { title: 'Markdown Editor', icon: 'Ⓜ️', href: '/markdown', color: '#3b82f6' },
+];
+---
+
+<Layout title="Lorem Ipsum Generator - Mini Labs">
+  <Navbar client:load currentPath="/lorem" />
+  <main style="max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem;">
+    <ToolPageShell client:load toolTitle="Lorem Ipsum Generator" toolIcon="📰" toolHref="/lorem" toolColor="#14b8a6" suggestions={suggestions}>
+      <div style="margin-bottom: 2.5rem; text-align: center;">
+        <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em;">Lorem Ipsum Generator</h1>
+        <p style="font-size: 1.0625rem; color: var(--text-secondary); max-width: 500px; margin: 0 auto; line-height: 1.6;">Generate dummy text for your UI mockups and prototypes.</p>
+      </div>
+      <LoremIpsum client:load />
+    </ToolPageShell>
+  </main>
+</Layout>

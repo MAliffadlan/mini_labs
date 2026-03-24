@@ -4,6 +4,7 @@
 import React from 'react';
 import CopyButton from '../../components/CopyButton';
 import { useAutoSave } from '../../hooks/useAutoSave';
+import { useDragDrop } from '../../hooks/useDragDrop';
 
 const sampleJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkFsaWYgRmFkbGFuIiwiaWF0IjoxNTE2MjM5MDIyLCJyb2xlIjoiYWRtaW4ifQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
 
@@ -34,6 +35,8 @@ export default function JwtDecoder() {
   const [token, setToken] = useAutoSave('jwt-decoder-input', sampleJwt);
   const decoded = decodeJwt(token);
 
+  const { isDragging, dragProps } = useDragDrop({ onDrop: setToken });
+
   const Section = ({ title, data, color }: { title: string; data: any; color: string }) => {
     const json = JSON.stringify(data, null, 2);
     return (
@@ -52,10 +55,15 @@ export default function JwtDecoder() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       {/* Input */}
-      <div>
+      <div {...dragProps} style={{ position: 'relative' }}>
         <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Paste JWT Token</label>
-        <textarea value={token} onChange={e => setToken(e.target.value)} placeholder="eyJhbGciOi..." spellCheck={false}
-          style={{ width: '100%', height: '100px', padding: '1.25rem', borderRadius: '14px', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)', color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.875rem', lineHeight: 1.6, outline: 'none', resize: 'none', wordBreak: 'break-all', transition: 'border-color 0.2s' }}
+        {isDragging && (
+          <div style={{ position: 'absolute', inset: 0, top: '2rem', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(9,9,11,0.8)', backdropFilter: 'blur(4px)', color: 'var(--accent-purple)', fontSize: '1.25rem', fontWeight: 600, borderRadius: '14px' }}>
+            📥 Drop JWT text file
+          </div>
+        )}
+        <textarea value={token} onChange={e => setToken(e.target.value)} placeholder="eyJhbGciOi... or drop a .txt file" spellCheck={false}
+          style={{ width: '100%', height: '100px', padding: '1.25rem', borderRadius: '14px', backgroundColor: isDragging ? 'rgba(139, 92, 246, 0.05)' : 'rgba(255,255,255,0.02)', border: '1px solid var(--border)', color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.875rem', lineHeight: 1.6, outline: 'none', resize: 'none', wordBreak: 'break-all', transition: 'all 0.2s' }}
           onFocus={e => e.currentTarget.style.borderColor = 'var(--accent-purple)'}
           onBlur={e => e.currentTarget.style.borderColor = 'var(--border)'}
         />
