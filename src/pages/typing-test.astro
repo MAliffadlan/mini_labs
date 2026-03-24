@@ -1,0 +1,42 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
+import ToolPageShell from '../components/ToolPageShell.tsx';
+import TypingTestApp from '../apps/utility/TypingTest.tsx';
+
+const pageTitle = "Typing Speed Test";
+const pageDescription = "Test your typing speed and accuracy. Choose your difficulty, race against the clock, and see your WPM score.";
+const icon = "⌨️";
+const color = "#8b5cf6";
+
+const suggestions = [
+  { title: 'Word Counter', icon: '📝', href: '/word-counter', color: '#10b981' },
+  { title: 'Notepad', icon: '📓', href: '/scratchpad', color: '#10b981' },
+  { title: 'Countdown Timer', icon: '⏳', href: '/countdown', color: '#eab308' }
+];
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <Navbar client:load currentPath="/typing-test" />
+  <main style="max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem;">
+    <ToolPageShell
+      client:load
+      toolTitle={pageTitle}
+      toolIcon={icon}
+      toolHref="/typing-test"
+      toolColor={color}
+      suggestions={suggestions}
+    >
+      <div style="margin-bottom: 2rem; text-align: center;">
+        <h1 style="font-size: 2.5rem; font-family: 'Outfit', sans-serif; font-weight: 700; color: #fff; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem;">
+          <span style={`color: ${color}`}>{icon}</span> {pageTitle}
+        </h1>
+        <p style="color: var(--text-secondary); font-size: 1.125rem; max-width: 600px; margin: 0 auto;">
+          {pageDescription}
+        </p>
+      </div>
+
+      <TypingTestApp client:only="react" />
+    </ToolPageShell>
+  </main>
+</Layout>

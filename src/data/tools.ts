@@ -47,4 +47,5 @@ export const allTools: ToolDef[] = [
   { title: 'HEX ↔ RGB Converter', description: 'Convert Hexadecimal colors to RGB values, or vice versa.', icon: '#', href: '/hex-rgb', category: 'Utility', popular: false, color: '#f59e0b', glowColor: 'rgba(245, 158, 11, 0.4)' },
   { title: 'EXIF / GPS Reader', description: 'Reveal hidden photo metadata, GPS location, and strip EXIF for privacy.', icon: '🕵️', href: '/exif-reader', category: 'Utility', popular: false, color: '#ef4444', glowColor: 'rgba(239, 68, 68, 0.4)' },
   { title: 'Spin the Wheel', description: 'Add names and spin a colorful wheel to pick a random winner!', icon: '🎡', href: '/spin-wheel', category: 'Utility', popular: false, color: '#8b5cf6', glowColor: 'rgba(139, 92, 246, 0.4)' },
+  { title: 'Typing Speed Test', description: 'Test your typing speed and accuracy with a Monkeytype-style test.', icon: '⌨️', href: '/typing-test', category: 'Utility', popular: false, color: '#8b5cf6', glowColor: 'rgba(139, 92, 246, 0.4)' },
 ];

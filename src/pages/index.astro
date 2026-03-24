@@ -3,7 +3,6 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.tsx';
 import SearchableTools from '../components/SearchableTools.tsx';
-import RecentTools from '../components/RecentTools.tsx';
 import ToastContainer from '../components/Toast.tsx';
 
 import { allTools } from '../data/tools';
@@ -41,8 +40,6 @@ import { allTools } from '../data/tools';
       </div>
     </div>
 
-    {/* Recently Used Tools */}
-    <RecentTools client:load />
 
     <SearchableTools client:load tools={allTools} />
 
