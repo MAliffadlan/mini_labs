@@ -31,6 +31,7 @@ export const allTools: ToolDef[] = [
   { title: 'CSS Formatter & Minifier', description: 'Format ugly CSS into readable code, or compress it to save bandwidth.', icon: '💅', href: '/css-formatter', category: 'Dev', popular: false, color: '#3b82f6', glowColor: 'rgba(59, 130, 246, 0.4)' },
   { title: 'Hash Generator', description: 'Generate MD5, SHA-1, SHA-256, and SHA-512 cryptographic hashes.', icon: '🔒', href: '/hash', category: 'Dev', popular: false, color: '#14b8a6', glowColor: 'rgba(20, 184, 166, 0.4)' },
   { title: 'REST API Tester', description: 'Send HTTP requests to test REST APIs. Inspect responses, status codes, and latencies.', icon: '🚀', href: '/api-tester', category: 'Dev', popular: false, color: '#f43f5e', glowColor: 'rgba(244, 63, 94, 0.4)' },
+  { title: 'Code Playground', description: 'Write HTML, CSS, and JS with a VS Code-style editor and live preview.', icon: '👨‍💻', href: '/code-playground', category: 'Dev', popular: false, color: '#8b5cf6', glowColor: 'rgba(139, 92, 246, 0.4)' },
   { title: 'UUID Generator', description: 'Generate up to 10,000 v4 UUIDs instantly with bulk formatting.', icon: '🆔', href: '/uuid', category: 'Dev', popular: false, color: '#8b5cf6', glowColor: 'rgba(139, 92, 246, 0.4)' },
   // Text
   { title: 'Markdown Editor', description: 'Write markdown with real-time HTML preview. Supports drag-and-drop.', icon: 'Ⓜ️', href: '/markdown', category: 'Text', popular: false, color: '#3b82f6', glowColor: 'rgba(59, 130, 246, 0.4)' },
