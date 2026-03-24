@@ -1,0 +1,42 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ToolPageShell from '../components/ToolPageShell.tsx';
+import ApiTesterApp from '../apps/dev/ApiTester.tsx';
+
+const pageTitle = "REST API Tester";
+const pageDescription = "Send HTTP requests, test REST APIs, and inspect JSON responses with status codes and latency tracking.";
+const icon = "🚀";
+const color = "#f43f5e";
+
+// Suggestions for related tools
+const suggestions = [
+  { title: 'JSON Formatter', icon: '{}', href: '/json', color: '#3b82f6' },
+  { title: 'JWT Decoder', icon: '🔑', href: '/jwt-decoder', color: '#f59e0b' },
+  { title: 'URL Encoder', icon: '🔗', href: '/url-encoder', color: '#06b6d4' }
+];
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <main style="padding: 2rem 1rem; max-width: 1400px; margin: 0 auto;">
+    <ToolPageShell
+      client:load
+      toolTitle={pageTitle}
+      toolIcon={icon}
+      toolHref="/api-tester"
+      toolColor={color}
+      suggestions={suggestions}
+    >
+      {/* Title & Description */}
+      <div style="margin-bottom: 2rem;">
+        <h1 style="font-size: 2.5rem; font-family: 'Outfit', sans-serif; font-weight: 700; color: #fff; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem;">
+          <span style={`color: ${color}`}>{icon}</span> {pageTitle}
+        </h1>
+        <p style="color: var(--text-secondary); font-size: 1.125rem; max-width: 600px;">
+          {pageDescription}
+        </p>
+      </div>
+
+      <ApiTesterApp client:only="react" />
+    </ToolPageShell>
+  </main>
+</Layout>
