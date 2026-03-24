@@ -1,7 +1,8 @@
 /**
- * CopyButton.tsx — Copies text to clipboard with visual confirmation
+ * CopyButton.tsx — Copies text to clipboard with toast notification
  */
 import React, { useState, useCallback } from 'react';
+import { showToast } from '../stores/toastStore';
 
 interface CopyButtonProps {
   text: string;
@@ -14,19 +15,17 @@ export default function CopyButton({ text, label = 'Copy' }: CopyButtonProps) {
   const handleCopy = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Fallback for non-secure contexts
       const textarea = document.createElement('textarea');
       textarea.value = text;
       document.body.appendChild(textarea);
       textarea.select();
       document.execCommand('copy');
       document.body.removeChild(textarea);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     }
+    setCopied(true);
+    showToast('Copied to clipboard!', '📋');
+    setTimeout(() => setCopied(false), 2000);
   }, [text]);
 
   return (

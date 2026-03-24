@@ -3,6 +3,8 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.tsx';
 import SearchableTools from '../components/SearchableTools.tsx';
+import RecentTools from '../components/RecentTools.tsx';
+import ToastContainer from '../components/Toast.tsx';
 
 const allTools = [
   // Popular
@@ -60,6 +62,9 @@ const allTools = [
       </div>
     </div>
 
+    {/* Recently Used Tools */}
+    <RecentTools client:load />
+
     <SearchableTools client:load tools={allTools} />
 
     {/* Improved Footer */}
@@ -75,6 +80,8 @@ const allTools = [
         Built with Astro + React · Crafted by <a href="https://github.com/MAliffadlan" target="_blank" style="color: var(--accent-purple); text-decoration: none;">Alif Fadlan</a>
       </p>
     </footer>
+
+    <ToastContainer client:load />
   </main>
 
   <style>

@@ -1,22 +1,25 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.tsx';
+import ToolPageShell from '../components/ToolPageShell.tsx';
 import ColorPickerTool from '../apps/color/ColorPickerTool.tsx';
+
+const suggestions = [
+  { title: 'Palette Generator', icon: '✨', href: '/palette-generator', color: '#f43f5e' },
+  { title: 'HEX ↔ RGB', icon: '#', href: '/hex-rgb', color: '#f59e0b' },
+  { title: 'Case Converter', icon: 'Aa', href: '/case-converter', color: '#f59e0b' },
+];
 ---
 
 <Layout title="Color Picker - Mini Labs">
   <Navbar client:load currentPath="/color-picker" />
-  
   <main style="max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem;">
-    <div style="margin-bottom: 2.5rem;">
-      <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em;">
-        Color Picker & Converter
-      </h1>
-      <p style="font-size: 1.0625rem; color: var(--text-secondary); max-width: 600px; line-height: 1.6;">
-        Pick colors visually and convert them instantly to HEX, RGB, and HSL values.
-      </p>
-    </div>
-
-    <ColorPickerTool client:load />
+    <ToolPageShell client:load toolTitle="Color Picker" toolIcon="🎨" toolHref="/color-picker" toolColor="#ec4899" suggestions={suggestions}>
+      <div style="margin-bottom: 2.5rem;">
+        <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em;">Color Picker</h1>
+        <p style="font-size: 1.0625rem; color: var(--text-secondary); max-width: 600px; line-height: 1.6;">Pick colors visually and convert them to HEX, RGB, and HSL.</p>
+      </div>
+      <ColorPickerTool client:load />
+    </ToolPageShell>
   </main>
 </Layout>

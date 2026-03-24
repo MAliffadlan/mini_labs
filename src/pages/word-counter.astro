@@ -1,22 +1,25 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.tsx';
+import ToolPageShell from '../components/ToolPageShell.tsx';
 import WordCounter from '../apps/text/WordCounter.tsx';
+
+const suggestions = [
+  { title: 'Case Converter', icon: 'Aa', href: '/case-converter', color: '#f59e0b' },
+  { title: 'JSON Formatter', icon: '{}', href: '/json', color: '#3b82f6' },
+  { title: 'Regex Tester', icon: '.*', href: '/regex', color: '#10b981' },
+];
 ---
 
 <Layout title="Word & Character Counter - Mini Labs">
   <Navbar client:load currentPath="/word-counter" />
-  
   <main style="max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem;">
-    <div style="margin-bottom: 2.5rem;">
-      <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em;">
-        Word & Character Counter
-      </h1>
-      <p style="font-size: 1.0625rem; color: var(--text-secondary); max-width: 600px; line-height: 1.6;">
-        Instantly count words, characters, sentences, and estimate reading time.
-      </p>
-    </div>
-
-    <WordCounter client:load />
+    <ToolPageShell client:load toolTitle="Word Counter" toolIcon="📝" toolHref="/word-counter" toolColor="#10b981" suggestions={suggestions}>
+      <div style="margin-bottom: 2.5rem;">
+        <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em;">Word & Character Counter</h1>
+        <p style="font-size: 1.0625rem; color: var(--text-secondary); max-width: 600px; line-height: 1.6;">Instantly count words, characters, sentences, and estimate reading time.</p>
+      </div>
+      <WordCounter client:load />
+    </ToolPageShell>
   </main>
 </Layout>
