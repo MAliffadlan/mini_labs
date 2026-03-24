@@ -50,4 +50,6 @@ export const allTools: ToolDef[] = [
   { title: 'Typing Speed Test', description: 'Test your typing speed and accuracy with a Monkeytype-style test.', icon: '⌨️', href: '/typing-test', category: 'Utility', popular: false, color: '#8b5cf6', glowColor: 'rgba(139, 92, 246, 0.4)' },
   { title: 'Scientific Calculator', description: 'Premium calculator with sin, cos, tan, log, sqrt, factorial, and history.', icon: '🧮', href: '/calculator', category: 'Utility', popular: false, color: '#8b5cf6', glowColor: 'rgba(139, 92, 246, 0.4)' },
   { title: 'IP & Network Info', description: 'Instantly detect your public IP address, location, ISP, and device info.', icon: '🌐', href: '/ip-info', category: 'Utility', popular: false, color: '#3b82f6', glowColor: 'rgba(59, 130, 246, 0.4)' },
+  { title: 'URL Scanner', description: 'Scan suspicious URLs for phishing, malware, brand impersonation, and red flags.', icon: '🛡️', href: '/url-scanner', category: 'Utility', popular: false, color: '#ef4444', glowColor: 'rgba(239, 68, 68, 0.4)' },
+  { title: 'Steganography', description: 'Hide secret messages inside images or reveal hidden messages. 100% client-side.', icon: '🔒', href: '/steganography', category: 'Utility', popular: false, color: '#8b5cf6', glowColor: 'rgba(139, 92, 246, 0.4)' },
 ];

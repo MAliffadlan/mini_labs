@@ -1,0 +1,42 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
+import ToolPageShell from '../components/ToolPageShell.tsx';
+import UrlScannerApp from '../apps/security/UrlScanner.tsx';
+
+const pageTitle = "URL Scanner";
+const pageDescription = "Scan suspicious URLs for phishing, malware, brand impersonation, and 10+ security red flags.";
+const icon = "🛡️";
+const color = "#ef4444";
+
+const suggestions = [
+  { title: 'EXIF Reader', icon: '🕵️', href: '/exif-reader', color: '#ef4444' },
+  { title: 'Steganography', icon: '🔒', href: '/steganography', color: '#8b5cf6' },
+  { title: 'Hash Generator', icon: '🔒', href: '/hash', color: '#14b8a6' }
+];
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <Navbar client:load currentPath="/url-scanner" />
+  <main style="max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem;">
+    <ToolPageShell
+      client:load
+      toolTitle={pageTitle}
+      toolIcon={icon}
+      toolHref="/url-scanner"
+      toolColor={color}
+      suggestions={suggestions}
+    >
+      <div style="margin-bottom: 2rem;">
+        <h1 style="font-size: 2.5rem; font-family: 'Outfit', sans-serif; font-weight: 700; color: #fff; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem;">
+          <span style={`color: ${color}`}>{icon}</span> {pageTitle}
+        </h1>
+        <p style="color: var(--text-secondary); font-size: 1.125rem; max-width: 600px;">
+          {pageDescription}
+        </p>
+      </div>
+
+      <UrlScannerApp client:only="react" />
+    </ToolPageShell>
+  </main>
+</Layout>

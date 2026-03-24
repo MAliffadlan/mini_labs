@@ -1,0 +1,42 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
+import ToolPageShell from '../components/ToolPageShell.tsx';
+import SteganographyApp from '../apps/security/Steganography.tsx';
+
+const pageTitle = "Steganography";
+const pageDescription = "Hide secret messages inside normal-looking images, or reveal hidden messages. 100% client-side encryption.";
+const icon = "🔒";
+const color = "#8b5cf6";
+
+const suggestions = [
+  { title: 'URL Scanner', icon: '🛡️', href: '/url-scanner', color: '#ef4444' },
+  { title: 'Hash Generator', icon: '🔒', href: '/hash', color: '#14b8a6' },
+  { title: 'Password Generator', icon: '🔐', href: '/password-generator', color: '#f43f5e' }
+];
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <Navbar client:load currentPath="/steganography" />
+  <main style="max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem;">
+    <ToolPageShell
+      client:load
+      toolTitle={pageTitle}
+      toolIcon={icon}
+      toolHref="/steganography"
+      toolColor={color}
+      suggestions={suggestions}
+    >
+      <div style="margin-bottom: 2rem; text-align: center;">
+        <h1 style="font-size: 2.5rem; font-family: 'Outfit', sans-serif; font-weight: 700; color: #fff; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem;">
+          <span style={`color: ${color}`}>{icon}</span> {pageTitle}
+        </h1>
+        <p style="color: var(--text-secondary); font-size: 1.125rem; max-width: 600px; margin: 0 auto;">
+          {pageDescription}
+        </p>
+      </div>
+
+      <SteganographyApp client:only="react" />
+    </ToolPageShell>
+  </main>
+</Layout>
