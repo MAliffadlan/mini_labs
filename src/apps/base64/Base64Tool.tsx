@@ -20,16 +20,7 @@ export default function Base64Tool() {
     onDrop: (text) => setInput(text)
   });
 
-  useEffect(() => {
-    import('../../utils/shareLink').then(({ getShareDataFromUrl }) => {
-      const sharedItem = getShareDataFromUrl();
-      if (sharedItem) setInput(sharedItem);
-    });
-  }, []);
 
-  useEffect(() => {
-    import('../../stores/shareStore').then(({ setShareData }) => setShareData(input));
-  }, [input]);
 
   // Process input based on current mode
   const processInput = useCallback(() => {

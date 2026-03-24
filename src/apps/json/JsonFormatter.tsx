@@ -30,16 +30,6 @@ export default function JsonFormatter() {
     accept: 'application/json'
   });
 
-  useEffect(() => {
-    import('../../utils/shareLink').then(({ getShareDataFromUrl }) => {
-      const sharedItem = getShareDataFromUrl();
-      if (sharedItem) setInput(sharedItem);
-    });
-  }, []);
-
-  useEffect(() => {
-    import('../../stores/shareStore').then(({ setShareData }) => setShareData(input));
-  }, [input]);
 
   // Format JSON whenever input or indent changes
   const formatJson = useCallback(() => {

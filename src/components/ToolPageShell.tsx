@@ -5,9 +5,7 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ToastContainer from './Toast';
-import ShareButton from './ShareButton';
 import { trackTool } from '../stores/recentStore';
-import { $shareData } from '../stores/shareStore';
 import { showToast } from '../stores/toastStore';
 import { playPop } from '../utils/sounds';
 
@@ -25,10 +23,9 @@ interface ToolPageShellProps {
   toolColor: string;
   suggestions?: SuggestedTool[];
   children: React.ReactNode;
-  supportShare?: boolean;
 }
 
-export default function ToolPageShell({ toolTitle, toolIcon, toolHref, toolColor, suggestions = [], children, supportShare }: ToolPageShellProps) {
+export default function ToolPageShell({ toolTitle, toolIcon, toolHref, toolColor, suggestions = [], children }: ToolPageShellProps) {
   // Track this tool on mount
   useEffect(() => {
     trackTool({ title: toolTitle, href: toolHref, icon: toolIcon, color: toolColor });
@@ -50,7 +47,6 @@ export default function ToolPageShell({ toolTitle, toolIcon, toolHref, toolColor
         
         {/* Action Buttons */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          {supportShare && <ShareButton toolPath={toolHref} getData={() => $shareData.get()} />}
         </div>
       </div>
 
