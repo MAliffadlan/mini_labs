@@ -1,0 +1,42 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
+import ToolPageShell from '../components/ToolPageShell.tsx';
+import IpInfoApp from '../apps/utility/IpInfo.tsx';
+
+const pageTitle = "IP & Network Info";
+const pageDescription = "Instantly see your public IP address, location, ISP, timezone, browser, and device information.";
+const icon = "🌐";
+const color = "#3b82f6";
+
+const suggestions = [
+  { title: 'Timezone Converter', icon: '🌍', href: '/timezone', color: '#06b6d4' },
+  { title: 'Hash Generator', icon: '🔒', href: '/hash', color: '#14b8a6' },
+  { title: 'EXIF Reader', icon: '🕵️', href: '/exif-reader', color: '#ef4444' }
+];
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <Navbar client:load currentPath="/ip-info" />
+  <main style="max-width: 1000px; margin: 0 auto; padding: 2rem 1.5rem;">
+    <ToolPageShell
+      client:load
+      toolTitle={pageTitle}
+      toolIcon={icon}
+      toolHref="/ip-info"
+      toolColor={color}
+      suggestions={suggestions}
+    >
+      <div style="margin-bottom: 2rem; text-align: center;">
+        <h1 style="font-size: 2.5rem; font-family: 'Outfit', sans-serif; font-weight: 700; color: #fff; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem;">
+          <span style={`color: ${color}`}>{icon}</span> {pageTitle}
+        </h1>
+        <p style="color: var(--text-secondary); font-size: 1.125rem; max-width: 600px; margin: 0 auto;">
+          {pageDescription}
+        </p>
+      </div>
+
+      <IpInfoApp client:only="react" />
+    </ToolPageShell>
+  </main>
+</Layout>

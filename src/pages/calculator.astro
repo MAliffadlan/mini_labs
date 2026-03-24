@@ -1,0 +1,42 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
+import ToolPageShell from '../components/ToolPageShell.tsx';
+import CalculatorApp from '../apps/utility/Calculator.tsx';
+
+const pageTitle = "Scientific Calculator";
+const pageDescription = "A premium calculator with scientific functions: sin, cos, tan, log, sqrt, factorial, and more.";
+const icon = "🧮";
+const color = "#8b5cf6";
+
+const suggestions = [
+  { title: 'HEX ↔ RGB', icon: '#', href: '/hex-rgb', color: '#f59e0b' },
+  { title: 'Timestamp', icon: '🕐', href: '/timestamp', color: '#8b5cf6' },
+  { title: 'Base64', icon: '⇋', href: '/base64', color: '#8b5cf6' }
+];
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <Navbar client:load currentPath="/calculator" />
+  <main style="max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem;">
+    <ToolPageShell
+      client:load
+      toolTitle={pageTitle}
+      toolIcon={icon}
+      toolHref="/calculator"
+      toolColor={color}
+      suggestions={suggestions}
+    >
+      <div style="margin-bottom: 2rem; text-align: center;">
+        <h1 style="font-size: 2.5rem; font-family: 'Outfit', sans-serif; font-weight: 700; color: #fff; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem;">
+          <span style={`color: ${color}`}>{icon}</span> {pageTitle}
+        </h1>
+        <p style="color: var(--text-secondary); font-size: 1.125rem; max-width: 600px; margin: 0 auto;">
+          {pageDescription}
+        </p>
+      </div>
+
+      <CalculatorApp client:only="react" />
+    </ToolPageShell>
+  </main>
+</Layout>
