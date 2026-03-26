@@ -511,14 +511,12 @@ export default function WebRTCClient() {
                 onChange={(e) => {
                   setInput(e.target.value);
                   if (connRef.current) {
-                    if (!typingTimeoutRef.current) {
-                      connRef.current.send({ type: 'typing', isTyping: true });
-                    } else {
-                      clearTimeout(typingTimeoutRef.current);
-                    }
+                    // Send typing true on every keystroke to refresh the receiver's timeout
+                    connRef.current.send({ type: 'typing', isTyping: true });
+                    
+                    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
                     typingTimeoutRef.current = setTimeout(() => {
                       connRef.current?.send({ type: 'typing', isTyping: false });
-                      typingTimeoutRef.current = null;
                     }, 1500);
                   }
                 }}
