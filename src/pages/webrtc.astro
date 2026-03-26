@@ -1,0 +1,28 @@
+---
+// webrtc.astro — WebRTC P2P Data Channel Experiment
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
+import ToolPageShell from '../components/ToolPageShell.tsx';
+import WebRTCClient from '../apps/experimental/WebRTCClient.tsx';
+---
+
+<Layout title="WebRTC P2P Transfer">
+  <Navbar client:load currentPath="/webrtc" showSearch={true} />
+
+  <main style="max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; position: relative;">
+    <ToolPageShell
+      client:load
+      toolTitle="WebRTC P2P Transfer"
+      toolIcon="📡"
+      toolHref="/webrtc"
+      toolColor="#10b981"
+      suggestions={[
+        { title: 'Hash Generator', icon: '🔒', href: '/hash', color: '#14b8a6' },
+        { title: 'IP & Network Info', icon: '🌐', href: '/ip-info', color: '#3b82f6' },
+        { title: 'Steganography', icon: '🔒', href: '/steganography', color: '#8b5cf6' },
+      ]}
+    >
+      <WebRTCClient client:only="react" />
+    </ToolPageShell>
+  </main>
+</Layout>

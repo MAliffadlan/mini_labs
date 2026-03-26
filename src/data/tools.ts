@@ -19,6 +19,11 @@ export interface ToolDef {
 export const allTools: ToolDef[] = [
   // Popular
   { 
+    title: 'WebRTC P2P Transfer', titleId: 'Transfer P2P WebRTC',
+    description: 'Establish a direct, serverless Peer-to-Peer connection to chat and send files natively in your browser.', descriptionId: 'Buat koneksi langsung (Peer-to-Peer) tanpa server untuk chat dan berkirim file secara native di browser.',
+    icon: '📡', href: '/webrtc', category: 'Dev', categoryId: 'Dev', popular: true, color: '#10b981', glowColor: 'rgba(16, 185, 129, 0.4)' 
+  },
+  { 
     title: 'JSON Formatter', titleId: 'Format JSON',
     description: 'Format, minify, and validate your JSON data with highlighted syntax errors.', descriptionId: 'Format, perkecil, dan validasi data JSON dengan penunjuk otomatis jika ada error.',
     icon: '{}', href: '/json', category: 'Dev', categoryId: 'Dev', popular: true, color: '#3b82f6', glowColor: 'rgba(59, 130, 246, 0.4)' 
