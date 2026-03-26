@@ -35,6 +35,7 @@ export default function WebRTCClient() {
   const connRef = useRef<DataConnection | null>(null);
   const mediaConnRef = useRef<MediaConnection | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
+  const remoteStreamRef = useRef<MediaStream | null>(null);
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -44,6 +45,22 @@ export default function WebRTCClient() {
 
   // Auto-scroll chat
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
+
+  // Sync streams to video elements AFTER they mount in the DOM
+  // This fixes the black screen bug: video elements only exist when callActive/screenActive is true,
+  // but streams are obtained BEFORE setting those states.
+  useEffect(() => {
+    if ((callActive || screenActive) && localStreamRef.current) {
+      if (localVideoRef.current && localVideoRef.current.srcObject !== localStreamRef.current) {
+        localVideoRef.current.srcObject = localStreamRef.current;
+      }
+    }
+    if ((callActive || screenActive) && remoteStreamRef.current) {
+      if (remoteVideoRef.current && remoteVideoRef.current.srcObject !== remoteStreamRef.current) {
+        remoteVideoRef.current.srcObject = remoteStreamRef.current;
+      }
+    }
+  }, [callActive, screenActive]);
 
   // Init PeerJS
   useEffect(() => {
@@ -123,30 +140,30 @@ export default function WebRTCClient() {
   // ─── Media Helpers ─────────────────────────────────────────
   const handleIncomingCall = async (call: MediaConnection) => {
     try {
-      // Try to get user media for video calls, fallback to audio only
       let stream: MediaStream;
       try {
         stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       } catch {
-        // If no camera, try audio only
         try {
           stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         } catch {
-          // No media devices, answer with empty stream
           stream = new MediaStream();
         }
       }
       localStreamRef.current = stream;
-      if (localVideoRef.current) { localVideoRef.current.srcObject = stream; }
       call.answer(stream);
       mediaConnRef.current = call;
-      setCallActive(true);
-      setActiveTab('video');
 
       call.on('stream', (remoteStream: MediaStream) => {
+        remoteStreamRef.current = remoteStream;
+        // Try to assign now, useEffect will also handle it after mount
         if (remoteVideoRef.current) { remoteVideoRef.current.srcObject = remoteStream; }
       });
       call.on('close', () => { stopAllMedia(); });
+
+      // Set state LAST so useEffect can assign streams after video elements mount
+      setCallActive(true);
+      setActiveTab('video');
     } catch (err) {
       console.error('Failed to answer call:', err);
     }
@@ -157,16 +174,18 @@ export default function WebRTCClient() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       localStreamRef.current = stream;
-      if (localVideoRef.current) { localVideoRef.current.srcObject = stream; }
 
       const call = peerRef.current.call(connectedPeerId, stream);
       mediaConnRef.current = call;
-      setCallActive(true);
 
       call.on('stream', (remoteStream: MediaStream) => {
+        remoteStreamRef.current = remoteStream;
         if (remoteVideoRef.current) { remoteVideoRef.current.srcObject = remoteStream; }
       });
       call.on('close', () => { stopAllMedia(); });
+
+      // Set state LAST so useEffect syncs streams after video elements mount
+      setCallActive(true);
     } catch (err) {
       alert('Camera/Mic access denied. Please allow permissions.');
       console.error(err);
@@ -178,19 +197,20 @@ export default function WebRTCClient() {
     try {
       const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: false });
       localStreamRef.current = stream;
-      if (localVideoRef.current) { localVideoRef.current.srcObject = stream; }
 
       const call = peerRef.current.call(connectedPeerId, stream);
       mediaConnRef.current = call;
-      setScreenActive(true);
 
-      // When user stops sharing via browser UI button
       stream.getVideoTracks()[0].addEventListener('ended', () => { stopAllMedia(); });
 
       call.on('stream', (remoteStream: MediaStream) => {
+        remoteStreamRef.current = remoteStream;
         if (remoteVideoRef.current) { remoteVideoRef.current.srcObject = remoteStream; }
       });
       call.on('close', () => { stopAllMedia(); });
+
+      // Set state LAST so useEffect syncs streams after video elements mount
+      setScreenActive(true);
     } catch (err) {
       console.error('Screen share cancelled or denied:', err);
     }
@@ -199,6 +219,7 @@ export default function WebRTCClient() {
   const stopAllMedia = () => {
     localStreamRef.current?.getTracks().forEach(t => t.stop());
     localStreamRef.current = null;
+    remoteStreamRef.current = null;
     mediaConnRef.current?.close();
     mediaConnRef.current = null;
     if (localVideoRef.current) localVideoRef.current.srcObject = null;
