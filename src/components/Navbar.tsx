@@ -41,7 +41,7 @@ export default function Navbar({ currentPath = '/', showSearch = false }: Navbar
 
   const navLinks = [
     { name: lang === 'id' ? 'Beranda' : 'Home', path: '/', icon: '🏠' },
-    { name: lang === 'id' ? 'Kategori' : 'Categories', path: '/#tools-grid', icon: '📂' },
+    { name: lang === 'id' ? 'Tentang' : 'About', path: '/about', icon: '👤' },
     { name: 'GitHub', path: 'https://github.com/MAliffadlan/mini_labs', icon: '🐙' }
   ];
 
