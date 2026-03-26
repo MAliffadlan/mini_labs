@@ -1,24 +1,30 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.tsx';
-import InteractiveLanyard from '../components/InteractiveLanyard.tsx';
+import Lanyard from '../components/Lanyard.tsx';
 ---
 
-<Layout title="About Mini Labs - Interactive Lanyard">
-  <div style="position: relative; width: 100%; height: 100vh; overflow: hidden; background: #09090b;">
+<Layout title="About Mini Labs">
+  <div style="position: relative; width: 100%; min-height: 100vh; background: #09090b; overflow: hidden;">
     <div style="position: absolute; top: 0; left: 0; width: 100%; z-index: 100;">
       <Navbar client:load currentPath="/about" />
     </div>
     
-    <InteractiveLanyard client:only="react" />
-    
-    {/* Additional overlay info at the bottom */}
-    <div style="position: absolute; bottom: 2rem; right: 2rem; z-index: 50; text-align: right;">
+    <Lanyard client:only="react" />
+
+    <!-- Overlay: Top Left Title -->
+    <div style="position: absolute; top: 6rem; left: 2rem; z-index: 50; pointer-events: none;">
+      <h1 style="font-family: 'Outfit', sans-serif; font-size: clamp(2rem, 5vw, 3rem); color: #fff; margin: 0; font-weight: 900;">Interactive</h1>
+      <h1 style="font-family: 'Outfit', sans-serif; font-size: clamp(2rem, 5vw, 3rem); color: #fff; margin: -10px 0 0 0; font-weight: 900;">Lanyard</h1>
+    </div>
+
+    <!-- Overlay: Bottom Right -->
+    <div style="position: absolute; bottom: 2rem; right: 2rem; z-index: 50; text-align: right; pointer-events: none;">
       <p style="color: rgba(255,255,255,0.4); font-family: 'Inter', sans-serif; font-size: 0.8125rem; font-weight: 500; margin: 0;">
-        Built with Astro & Framer Motion
+        Built with Three.js & Rapier Physics
       </p>
       <p style="color: rgba(255,255,255,0.2); font-family: 'Inter', sans-serif; font-size: 0.75rem; margin: 0.25rem 0 0 0;">
-        Simulated 2D spring physics
+        Grab and drag the badge!
       </p>
     </div>
   </div>
