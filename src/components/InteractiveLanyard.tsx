@@ -157,7 +157,7 @@ export default function InteractiveLanyard() {
           <motion.div style={{
             position: 'absolute',
             inset: 0,
-            background: \`radial-gradient(circle at \${lightX}% \${lightY}%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%)\`,
+            background: `radial-gradient(circle at ${lightX}% ${lightY}%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%)`,
             pointerEvents: 'none',
             zIndex: 20
           }} />
