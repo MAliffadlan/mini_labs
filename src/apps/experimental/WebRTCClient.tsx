@@ -507,7 +507,7 @@ export default function WebRTCClient() {
                 display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '320px',
               }}>
                 <video ref={remoteVideoRef} autoPlay playsInline style={{
-                  width: '100%', height: '100%', objectFit: 'cover',
+                  width: '100%', height: '100%', objectFit: 'contain',
                   display: callActive ? 'block' : 'none',
                 }} />
                 {!callActive && (
