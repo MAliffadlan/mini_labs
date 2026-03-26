@@ -22,6 +22,7 @@ export default function WebRTCClient() {
   // Chat state
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
+  const [isPeerTyping, setIsPeerTyping] = useState(false);
 
   // Media state
   const [activeTab, setActiveTab] = useState<ActiveTab>('chat');
@@ -40,6 +41,8 @@ export default function WebRTCClient() {
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const typingTimeoutRef = useRef<any>(null);
+  const peerTypingTimeoutRef = useRef<any>(null);
 
   const now = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
@@ -85,9 +88,17 @@ export default function WebRTCClient() {
 
     conn.on('data', (data: any) => {
       const t = now();
-      if (data.type === 'chat') {
+      if (data.type === 'typing') {
+        setIsPeerTyping(data.isTyping);
+        if (peerTypingTimeoutRef.current) clearTimeout(peerTypingTimeoutRef.current);
+        if (data.isTyping) {
+          peerTypingTimeoutRef.current = setTimeout(() => setIsPeerTyping(false), 3000);
+        }
+      } else if (data.type === 'chat') {
+        setIsPeerTyping(false);
         setMessages(prev => [...prev, { sender: 'them', text: data.text, time: t }]);
       } else if (data.type === 'file') {
+        setIsPeerTyping(false);
         const blob = new Blob([data.file]);
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -121,6 +132,9 @@ export default function WebRTCClient() {
     connRef.current.send({ type: 'chat', text: input });
     setMessages(prev => [...prev, { sender: 'me', text: input, time: now() }]);
     setInput('');
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    connRef.current.send({ type: 'typing', isTyping: false });
+    typingTimeoutRef.current = null;
   };
 
   const sendFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -460,6 +474,25 @@ export default function WebRTCClient() {
               <div ref={bottomRef} />
             </div>
 
+            {/* Typing Indicator */}
+            {isPeerTyping && (
+              <div style={{ padding: '0 1.25rem 0.5rem', display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+                <style>{`
+                  @keyframes typingBlink { 0%, 100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1); } }
+                  .typing-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text-muted); animation: typingBlink 1.4s infinite both; }
+                  .typing-dot:nth-child(1) { animation-delay: 0s; }
+                  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+                  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+                `}</style>
+                <div style={{ display: 'flex', gap: '3px' }}>
+                  <span className="typing-dot" />
+                  <span className="typing-dot" />
+                  <span className="typing-dot" />
+                </div>
+                <span style={{ fontSize: '0.6875rem', color: 'var(--text-muted)', fontStyle: 'italic', fontFamily: "'Inter', sans-serif" }}>Peer is typing...</span>
+              </div>
+            )}
+
             {/* Input */}
             <form onSubmit={send} style={{ padding: '0.75rem 1rem', borderTop: '1px solid var(--border)', display: 'flex', gap: '0.5rem', alignItems: 'center', background: 'rgba(255,255,255,0.01)' }}>
               <input type="file" ref={fileRef} style={{ display: 'none' }} onChange={sendFile} />
@@ -474,7 +507,21 @@ export default function WebRTCClient() {
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
               </button>
-              <input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Type a message..."
+              <input type="text" value={input} placeholder="Type a message..."
+                onChange={(e) => {
+                  setInput(e.target.value);
+                  if (connRef.current) {
+                    if (!typingTimeoutRef.current) {
+                      connRef.current.send({ type: 'typing', isTyping: true });
+                    } else {
+                      clearTimeout(typingTimeoutRef.current);
+                    }
+                    typingTimeoutRef.current = setTimeout(() => {
+                      connRef.current?.send({ type: 'typing', isTyping: false });
+                      typingTimeoutRef.current = null;
+                    }, 1500);
+                  }
+                }}
                 style={{ ...inputStyle, flex: 1 }}
                 onFocus={(e) => { e.currentTarget.style.borderColor = '#10b981'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(16,185,129,0.1)'; }}
                 onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.boxShadow = 'none'; }}
