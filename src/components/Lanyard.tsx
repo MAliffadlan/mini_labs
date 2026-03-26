@@ -2,7 +2,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { Canvas, extend, useFrame } from '@react-three/fiber';
-import { useGLTF, useTexture, Environment, Lightformer } from '@react-three/drei';
+import { useGLTF, useTexture, Environment, Lightformer, Text } from '@react-three/drei';
 import { BallCollider, CuboidCollider, Physics, RigidBody, useRopeJoint, useSphericalJoint } from '@react-three/rapier';
 import { MeshLineGeometry, MeshLineMaterial } from 'meshline';
 import * as THREE from 'three';
@@ -11,6 +11,7 @@ extend({ MeshLineGeometry, MeshLineMaterial });
 
 const CARD_GLB = '/assets/lanyard/card.glb';
 const LANYARD_PNG = '/assets/lanyard/lanyard.png';
+const PROFILE_PNG = '/assets/lanyard/profile.png';
 
 export default function Lanyard({ position = [0, 0, 30], gravity = [0, -40, 0], fov = 20, transparent = true }: any) {
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
@@ -93,6 +94,11 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: any) {
   const segmentProps = { type: 'dynamic' as const, canSleep: true, colliders: false as const, angularDamping: 4, linearDamping: 4 };
   const { nodes, materials } = useGLTF(CARD_GLB) as any;
   const texture = useTexture(LANYARD_PNG);
+  const profileTexture = useTexture(PROFILE_PNG);
+
+  // Make the profile texture look crisp
+  profileTexture.minFilter = THREE.LinearFilter;
+  profileTexture.magFilter = THREE.LinearFilter;
 
   const [curve] = useState(
     () =>
@@ -140,7 +146,8 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: any) {
       band.current.geometry.setPoints(curve.getPoints(isMobile ? 16 : 32));
       ang.copy(card.current.angvel());
       rot.copy(card.current.rotation());
-      card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z });
+      // Stronger Y-rotation correction to keep card facing camera (photo side forward)
+      card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.6, z: ang.z });
     }
   });
 
@@ -173,18 +180,45 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: any) {
               drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())))
             )}
           >
+            {/* Card body - use GLB geometry but with custom profile photo */}
             <mesh geometry={nodes.card.geometry}>
               <meshPhysicalMaterial
-                map={materials.base.map}
+                map={profileTexture}
                 map-anisotropy={16}
                 clearcoat={isMobile ? 0 : 1}
                 clearcoatRoughness={0.15}
-                roughness={0.9}
-                metalness={0.8}
+                roughness={0.3}
+                metalness={0.1}
               />
             </mesh>
+            {/* Metal clip and clamp */}
             <mesh geometry={nodes.clip.geometry} material={materials.metal} material-roughness={0.3} />
             <mesh geometry={nodes.clamp.geometry} material={materials.metal} />
+
+            {/* Username text on the card (front face, below the photo area) */}
+            <Text
+              position={[0, -0.35, 0.02]}
+              fontSize={0.075}
+              color="#ffffff"
+              font="https://fonts.gstatic.com/s/inter/v18/UcCo3FwrK3iLTcviYwY.woff2"
+              anchorX="center"
+              anchorY="middle"
+              fontWeight={700}
+            >
+              fadlan6849
+            </Text>
+
+            {/* Subtitle */}
+            <Text
+              position={[0, -0.42, 0.02]}
+              fontSize={0.04}
+              color="#888888"
+              font="https://fonts.gstatic.com/s/inter/v18/UcCo3FwrK3iLTcviYwY.woff2"
+              anchorX="center"
+              anchorY="middle"
+            >
+              Full-Stack Developer
+            </Text>
           </group>
         </RigidBody>
       </group>

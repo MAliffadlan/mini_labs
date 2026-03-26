@@ -4,28 +4,108 @@ import Navbar from '../components/Navbar.tsx';
 import Lanyard from '../components/Lanyard.tsx';
 ---
 
-<Layout title="About Mini Labs">
-  <div style="position: relative; width: 100%; min-height: 100vh; background: #09090b; overflow: hidden;">
-    <div style="position: absolute; top: 0; left: 0; width: 100%; z-index: 100;">
+<Layout title="About - fadlan6849 | Mini Labs">
+  <div class="about-page">
+    <div class="about-navbar-wrapper">
       <Navbar client:load currentPath="/about" />
     </div>
     
     <Lanyard client:only="react" />
-
-    <!-- Overlay: Top Left Title -->
-    <div style="position: absolute; top: 6rem; left: 2rem; z-index: 50; pointer-events: none;">
-      <h1 style="font-family: 'Outfit', sans-serif; font-size: clamp(2rem, 5vw, 3rem); color: #fff; margin: 0; font-weight: 900;">Interactive</h1>
-      <h1 style="font-family: 'Outfit', sans-serif; font-size: clamp(2rem, 5vw, 3rem); color: #fff; margin: -10px 0 0 0; font-weight: 900;">Lanyard</h1>
+    
+    <!-- Drag hint -->
+    <div class="about-hint">
+      <span class="about-hint-icon">👆</span>
+      <span>Grab & drag the badge!</span>
     </div>
 
     <!-- Overlay: Bottom Right -->
-    <div style="position: absolute; bottom: 2rem; right: 2rem; z-index: 50; text-align: right; pointer-events: none;">
-      <p style="color: rgba(255,255,255,0.4); font-family: 'Inter', sans-serif; font-size: 0.8125rem; font-weight: 500; margin: 0;">
-        Built with Three.js & Rapier Physics
-      </p>
-      <p style="color: rgba(255,255,255,0.2); font-family: 'Inter', sans-serif; font-size: 0.75rem; margin: 0.25rem 0 0 0;">
-        Grab and drag the badge!
-      </p>
+    <div class="about-credits">
+      <p class="about-credits-title">Built with Three.js & Rapier Physics</p>
+      <p class="about-credits-sub">@fadlan6849 · Mini Labs</p>
     </div>
   </div>
 </Layout>
+
+<style>
+  .about-page {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background: #09090b;
+    overflow: hidden;
+  }
+
+  .about-navbar-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+  }
+
+  .about-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 9999px;
+    color: rgba(255,255,255,0.5);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    pointer-events: none;
+    animation: fadeInUp 1s ease-out 2s both;
+  }
+
+  .about-hint-icon {
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  .about-credits {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 50;
+    text-align: right;
+    pointer-events: none;
+  }
+
+  .about-credits-title {
+    color: rgba(255,255,255,0.35);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .about-credits-sub {
+    color: rgba(255,255,255,0.2);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.6875rem;
+    margin: 0.25rem 0 0 0;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  @media (max-width: 768px) {
+    .about-credits {
+      display: none;
+    }
+  }
+</style>
