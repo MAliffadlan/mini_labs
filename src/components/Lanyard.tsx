@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { Canvas, extend, useFrame } from '@react-three/fiber';
 import { useGLTF, useTexture, Environment, Lightformer, Text } from '@react-three/drei';
 import { BallCollider, CuboidCollider, Physics, RigidBody, useRopeJoint, useSphericalJoint } from '@react-three/rapier';
@@ -13,14 +13,31 @@ const CARD_GLB = '/assets/lanyard/card.glb';
 const LANYARD_PNG = '/assets/lanyard/lanyard.png';
 const PROFILE_PNG = '/assets/lanyard/profile.png';
 
+// Preload assets at module level
+useGLTF.preload(CARD_GLB);
+
 export default function Lanyard({ position = [0, 0, 30], gravity = [0, -40, 0], fov = 20, transparent = true }: any) {
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  if (error) {
+    return (
+      <div style={{
+        width: '100%', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        flexDirection: 'column', gap: '1rem', color: '#888', fontFamily: "'Inter', sans-serif"
+      }}>
+        <p style={{ fontSize: '1.5rem' }}>⚠️</p>
+        <p style={{ fontSize: '0.875rem' }}>Failed to load 3D scene</p>
+        <p style={{ fontSize: '0.75rem', color: '#555' }}>{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div style={{
@@ -40,38 +57,16 @@ export default function Lanyard({ position = [0, 0, 30], gravity = [0, -40, 0], 
         onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
       >
         <ambientLight intensity={Math.PI} />
-        <Physics gravity={gravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
-          <Band isMobile={isMobile} />
-        </Physics>
+        <Suspense fallback={null}>
+          <Physics gravity={gravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
+            <Band isMobile={isMobile} />
+          </Physics>
+        </Suspense>
         <Environment blur={0.75}>
-          <Lightformer
-            intensity={2}
-            color="white"
-            position={[0, -1, 5]}
-            rotation={[0, 0, Math.PI / 3]}
-            scale={[100, 0.1, 1]}
-          />
-          <Lightformer
-            intensity={3}
-            color="white"
-            position={[-1, -1, 1]}
-            rotation={[0, 0, Math.PI / 3]}
-            scale={[100, 0.1, 1]}
-          />
-          <Lightformer
-            intensity={3}
-            color="white"
-            position={[1, 1, 1]}
-            rotation={[0, 0, Math.PI / 3]}
-            scale={[100, 0.1, 1]}
-          />
-          <Lightformer
-            intensity={10}
-            color="white"
-            position={[-10, 0, 14]}
-            rotation={[0, Math.PI / 2, Math.PI / 3]}
-            scale={[100, 10, 1]}
-          />
+          <Lightformer intensity={2} color="white" position={[0, -1, 5]} rotation={[0, 0, Math.PI / 3]} scale={[100, 0.1, 1]} />
+          <Lightformer intensity={3} color="white" position={[-1, -1, 1]} rotation={[0, 0, Math.PI / 3]} scale={[100, 0.1, 1]} />
+          <Lightformer intensity={3} color="white" position={[1, 1, 1]} rotation={[0, 0, Math.PI / 3]} scale={[100, 0.1, 1]} />
+          <Lightformer intensity={10} color="white" position={[-10, 0, 14]} rotation={[0, Math.PI / 2, Math.PI / 3]} scale={[100, 10, 1]} />
         </Environment>
       </Canvas>
     </div>
@@ -96,13 +91,11 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: any) {
   const texture = useTexture(LANYARD_PNG);
   const profileTexture = useTexture(PROFILE_PNG);
 
-  // Make the profile texture look crisp
   profileTexture.minFilter = THREE.LinearFilter;
   profileTexture.magFilter = THREE.LinearFilter;
 
   const [curve] = useState(
-    () =>
-      new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()])
+    () => new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()])
   );
   const [dragged, drag] = useState<any>(false);
   const [hovered, hover] = useState(false);
@@ -110,10 +103,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: any) {
   useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1] as any);
   useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1] as any);
   useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1] as any);
-  useSphericalJoint(j3, card, [
-    [0, 0, 0],
-    [0, 1.5, 0]
-  ] as any);
+  useSphericalJoint(j3, card, [[0, 0, 0], [0, 1.5, 0]] as any);
 
   useEffect(() => {
     if (hovered) {
@@ -146,7 +136,6 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: any) {
       band.current.geometry.setPoints(curve.getPoints(isMobile ? 16 : 32));
       ang.copy(card.current.angvel());
       rot.copy(card.current.rotation());
-      // Stronger Y-rotation correction to keep card facing camera (photo side forward)
       card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.6, z: ang.z });
     }
   });
@@ -180,7 +169,6 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: any) {
               drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())))
             )}
           >
-            {/* Card body - use GLB geometry but with custom profile photo */}
             <mesh geometry={nodes.card.geometry}>
               <meshPhysicalMaterial
                 map={profileTexture}
@@ -191,11 +179,9 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: any) {
                 metalness={0.1}
               />
             </mesh>
-            {/* Metal clip and clamp */}
             <mesh geometry={nodes.clip.geometry} material={materials.metal} material-roughness={0.3} />
             <mesh geometry={nodes.clamp.geometry} material={materials.metal} />
 
-            {/* Username text on the card (front face, below the photo area) */}
             <Text
               position={[0, -0.35, 0.02]}
               fontSize={0.075}
@@ -207,8 +193,6 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: any) {
             >
               fadlan6849
             </Text>
-
-            {/* Subtitle */}
             <Text
               position={[0, -0.42, 0.02]}
               fontSize={0.04}
