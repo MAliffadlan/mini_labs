@@ -23,6 +23,7 @@ export default function WebRTCClient() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isPeerTyping, setIsPeerTyping] = useState(false);
+  const [pingMs, setPingMs] = useState<number | null>(null);
 
   // Media state
   const [activeTab, setActiveTab] = useState<ActiveTab>('chat');
@@ -43,6 +44,7 @@ export default function WebRTCClient() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<any>(null);
   const peerTypingTimeoutRef = useRef<any>(null);
+  const pingIntervalRef = useRef<any>(null);
 
   const now = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
@@ -69,6 +71,21 @@ export default function WebRTCClient() {
     }
   }, [callActive, screenActive]);
 
+  // Ping interval for latency meter
+  useEffect(() => {
+    if (status === 'connected' && connRef.current) {
+      pingIntervalRef.current = setInterval(() => {
+        if (connRef.current) {
+          connRef.current.send({ type: 'ping', timestamp: Date.now() });
+        }
+      }, 2000);
+    } else {
+      setPingMs(null);
+      if (pingIntervalRef.current) clearInterval(pingIntervalRef.current);
+    }
+    return () => clearInterval(pingIntervalRef.current);
+  }, [status]);
+
   // Init PeerJS
   useEffect(() => {
     import('peerjs').then(({ default: Peer }) => {
@@ -92,6 +109,15 @@ export default function WebRTCClient() {
 
     conn.on('data', (data: any) => {
       const t = now();
+      if (data.type === 'ping') {
+        conn.send({ type: 'pong', timestamp: data.timestamp });
+        return;
+      }
+      if (data.type === 'pong') {
+        setPingMs(Date.now() - data.timestamp);
+        return;
+      }
+      
       if (data.type === 'typing') {
         setIsPeerTyping(data.isTyping);
         if (peerTypingTimeoutRef.current) clearTimeout(peerTypingTimeoutRef.current);
@@ -366,6 +392,12 @@ export default function WebRTCClient() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: statusColor, display: 'inline-block', boxShadow: isConnected ? '0 0 8px rgba(16,185,129,0.6)' : 'none' }} />
                 <span style={{ fontSize: '0.75rem', color: statusColor, fontWeight: 500 }}>{statusLabel}</span>
+                {status === 'connected' && pingMs !== null && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginLeft: '0.5rem', padding: '0.2rem 0.6rem', background: 'rgba(255,255,255,0.05)', borderRadius: '99px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={pingMs < 50 ? '#10b981' : pingMs < 150 ? '#f59e0b' : '#ef4444'} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                    <span style={{ fontSize: '0.6875rem', color: pingMs < 50 ? '#10b981' : pingMs < 150 ? '#f59e0b' : '#ef4444', fontFamily: "'JetBrains Mono', monospace", fontWeight: 600 }}>{pingMs}ms</span>
+                  </div>
+                )}
               </div>
               {isConnected ? (
                 <button onClick={disconnectAll} style={btnDanger}
