@@ -20,7 +20,7 @@ export const allTools: ToolDef[] = [
   // Popular
   { 
     title: 'WebRTC P2P Transfer', titleId: 'Transfer P2P WebRTC',
-    description: 'Establish a direct, serverless Peer-to-Peer connection to chat and send files natively in your browser.', descriptionId: 'Buat koneksi langsung (Peer-to-Peer) tanpa server untuk chat dan berkirim file secara native di browser.',
+    description: 'P2P chat, file transfer, video call, and screen sharing — all serverless, directly in your browser.', descriptionId: 'Chat, kirim file, video call, dan screen sharing P2P — langsung antar browser tanpa server.',
     icon: '📡', href: '/webrtc', category: 'Dev', categoryId: 'Dev', popular: true, color: '#10b981', glowColor: 'rgba(16, 185, 129, 0.4)' 
   },
   { 
