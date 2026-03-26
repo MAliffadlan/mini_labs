@@ -275,9 +275,9 @@ export default function WebRTCClient() {
     <div style={{ maxWidth: '900px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
 
       {/* ── Connection Panel ─────────────────────────────────── */}
-      <div style={{ ...card, padding: '1.75rem 2rem' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1px 1fr', gap: '2rem', alignItems: 'start' }}>
-          {/* Left: My ID */}
+      <div style={{ ...card, padding: '1.5rem' }}>
+        <div className="webrtc-connection-grid" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          {/* My ID */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             <span style={label}>Your Peer ID</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -286,6 +286,7 @@ export default function WebRTCClient() {
                 background: 'var(--bg-elevated)', border: '1px solid var(--border)',
                 color: '#10b981', fontSize: '0.75rem', fontFamily: "'JetBrains Mono', monospace",
                 overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', userSelect: 'all',
+                minWidth: 0,
               }}>
                 {peerId || '● ● ● generating...'}
               </code>
@@ -307,8 +308,8 @@ export default function WebRTCClient() {
             </p>
           </div>
 
-          {/* Divider */}
-          <div style={{ width: '1px', height: '100%', background: 'var(--border)' }} />
+          {/* Horizontal Divider */}
+          <div style={{ width: '100%', height: '1px', background: 'var(--border)' }} />
 
           {/* Right: Connect */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -660,8 +661,10 @@ export default function WebRTCClient() {
         </div>
       </div>
 
-      {/* Pulse animation keyframes */}
-      <style>{`@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }`}</style>
+      {/* Animations + Responsive */}
+      <style>{`
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+      `}</style>
     </div>
   );
 }
