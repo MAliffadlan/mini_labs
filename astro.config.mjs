@@ -8,6 +8,9 @@ export default defineConfig({
   integrations: [react()],
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      exclude: ['@dimforge/rapier3d-compat'],
+    },
   },
   devToolbar: {
     enabled: false,
