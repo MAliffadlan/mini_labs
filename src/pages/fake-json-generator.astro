@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.tsx';
+import ToolPageShell from '../components/ToolPageShell.tsx';
+import FakeJsonGeneratorApp from '../apps/fake-json/FakeJsonGenerator.tsx';
+
+const suggestions = [
+  { title: 'JSON Formatter', icon: '{}', href: '/json', color: '#3b82f6' },
+  { title: 'JSON → CSV', icon: '📊', href: '/json-csv', color: '#8b5cf6' },
+  { title: 'UUID Generator', icon: '🆔', href: '/uuid', color: '#8b5cf6' },
+];
+---
+
+<Layout title="Fake JSON Data Generator">
+  <Navbar client:load currentPath="/fake-json-generator" />
+  <main style="max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem;">
+    <ToolPageShell client:load toolTitle="Fake JSON Data Generator" toolIcon="💾" toolHref="/fake-json-generator" toolColor="#10b981" suggestions={suggestions}>
+      
+      <FakeJsonGeneratorApp client:visible />
+    </ToolPageShell>
+  </main>
+</Layout>

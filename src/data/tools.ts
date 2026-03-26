@@ -40,6 +40,11 @@ export const allTools: ToolDef[] = [
   },
   // Dev
   { 
+    title: 'Fake JSON Generator', titleId: 'Penghasil JSON Palsu',
+    description: 'Generate massive arrays of mock JSON data with custom schemas instantly.', descriptionId: 'Buat ribuan data JSON tiruan (mock data) dengan skema kustom secepat kilat.',
+    icon: '💾', href: '/fake-json-generator', category: 'Dev', categoryId: 'Dev', popular: true, color: '#10b981', glowColor: 'rgba(16, 185, 129, 0.4)' 
+  },
+  { 
     title: 'Regex Tester', titleId: 'Penguji Regex',
     description: 'Test and debug your Regular Expressions against custom text strings.', descriptionId: 'Uji dan cari kutu (debug) kode Regular Expression bos ke teks apa saja.',
     icon: '.*', href: '/regex', category: 'Dev', categoryId: 'Dev', popular: false, color: '#10b981', glowColor: 'rgba(16, 185, 129, 0.4)' 
