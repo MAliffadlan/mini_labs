@@ -17,6 +17,7 @@ interface NavbarProps {
 export default function Navbar({ currentPath = '/', showSearch = false }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const lang = useStore($lang);
 
   useEffect(() => {
@@ -24,6 +25,15 @@ export default function Navbar({ currentPath = '/', showSearch = false }: Navbar
     check();
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
+  }, []);
+
+  // Track scroll position for shrink animation
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Close menu on route change
@@ -67,8 +77,8 @@ export default function Navbar({ currentPath = '/', showSearch = false }: Navbar
           WebkitBackdropFilter: 'blur(24px) saturate(180%)',
           border: '1px solid rgba(255, 255, 255, 0.08)',
           boxShadow: '0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
-          width: isMobile ? '100%' : 'auto',
-          maxWidth: isMobile ? '100%' : undefined,
+          width: isMobile ? '100%' : (isScrolled ? 'fit-content' : '100%'),
+          maxWidth: isMobile ? '100%' : '1000px',
         }}
       >
         {/* Logo */}
